@@ -5,3 +5,7 @@ Aplikasi algoritma string matching dan regular expression untuk membentuk chat b
 ## Author
 - 13519018
 - 13519194
+
+## Cara run
+1. npm install
+2. npm start
