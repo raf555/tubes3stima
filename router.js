@@ -20,12 +20,11 @@ app.get("/parsechat", (req, res) => {
 
 function process(parsed) {
   let result;
-  const taskdb = editJsonFile("db/task.json");
   let type = parsed.type;
   if (type == "add") {
-    result = add(taskdb, parsed);
+    result = add(parsed);
   } else if (type == "update") {
-    result = update(taskdb, parsed);
+    result = update(parsed);
   } else if (type == "finish") {
   } else if (type == "fetch") {
   } else if (type == "find") {
@@ -35,7 +34,8 @@ function process(parsed) {
   return result;
 }
 
-function add(taskdb, parsed) {
+function add(parsed) {
+  const taskdb = editJsonFile("db/task.json");
   let result, status, response;
   // add task type
   let id = (Object.keys(taskdb.get()).length + 1).toString();
@@ -56,9 +56,12 @@ function add(taskdb, parsed) {
     status: status,
     response: response
   };
+  
+  return result;
 }
 
-function update(taskdb, parsed) {
+function update(parsed) {
+  const taskdb = editJsonFile("db/task.json");
   let result, status, response;
 
   // update date
