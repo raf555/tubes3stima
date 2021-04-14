@@ -51,27 +51,46 @@ function getdate(text) {
     "desember"
   ];
   let exec,
+    type,
     date = null;
-  let format1 = /\s(\d{2}|\d{1})\s(.+)\s(\d{4})/gi; /* tanggal bulan(str) tahun */
-  let format2 = /\s(\d{2}|\d{1})\/(\d{2}|\d{1})\/(\d{4})/gi; /* DD/MM/YYYY */
-  let format3 = /\s(\d{2}|\d{1})\s?-\s?(\d{2}|\d{1})\s?-\s?(\d{4})/gi; /* DD-MM-YYYY */
+  let format1 = /(\d{2}|\d{1})\s(.+)\s(\d{4})/gi; /* tanggal bulan(str) tahun */
+  let format2 = /(\d{2}|\d{1})\/(\d{2}|\d{1})\/(\d{4})/gi; /* DD/MM/YYYY */
+  let format3 = /(\d{2}|\d{1})\s?-\s?(\d{2}|\d{1})\s?-\s?(\d{4})/gi; /* DD-MM-YYYY */
 
+  type = 1;
   exec = format1.exec(text);
   if (exec == null) {
+    type = 2;
     exec = format2.exec(text);
   }
   if (exec == null) {
+    type = 3;
     exec = format3.exec(text);
   }
 
   if (exec != null) {
-    date = {
-      tgl: parseInt(exec[1]),
-      bln: isNaN(exec[2])
-        ? bulan.indexOf(exec[2].toLowerCase()) + 1
-        : parseInt(exec[2]),
-      thn: parseInt(exec[3])
-    };
+    date = [
+      {
+        tgl: parseInt(exec[1]),
+        bln: isNaN(exec[2])
+          ? bulan.indexOf(exec[2].toLowerCase()) + 1
+          : parseInt(exec[2]),
+        thn: parseInt(exec[3])
+      }
+    ];
+
+    let reg = [format1, format2, format3];
+    let exec2;
+
+    while ((exec2 = reg[type - 1].exec(text)) !== null) {
+      date.push({
+        tgl: parseInt(exec2[1]),
+        bln: isNaN(exec2[2])
+          ? bulan.indexOf(exec2[2].toLowerCase()) + 1
+          : parseInt(exec2[2]),
+        thn: parseInt(exec2[3])
+      });
+    }
   }
   return date;
 }
@@ -113,6 +132,10 @@ function parse1(text) {
 
   /* getting date */
   date = getdate(text);
+
+  if (date != null) {
+    date = date[0];
+  }
 
   let out = {
     type: "add",

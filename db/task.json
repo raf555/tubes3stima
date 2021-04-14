@@ -19,5 +19,12 @@
     "jenis": "Tubes",
     "topik": "bikin chatbot",
     "selesai": false
+  },
+  "4": {
+    "tanggal": "14/04/2021",
+    "kuliah": "oop",
+    "jenis": "Kuis",
+    "topik": "materi javai",
+    "selesai": false
   }
 }
