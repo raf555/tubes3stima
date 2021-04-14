@@ -26,5 +26,12 @@
     "jenis": "Kuis",
     "topik": "materi javai",
     "selesai": false
+  },
+  "5": {
+    "tanggal": "27/10/2021",
+    "kuliah": "if2211",
+    "jenis": "Tucil",
+    "topik": "bikin graf",
+    "selesai": false
   }
 }
