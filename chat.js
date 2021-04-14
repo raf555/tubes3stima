@@ -53,7 +53,7 @@ function getdate(text) {
   let exec,
     type,
     date = null;
-  let format1 = /(\d{2}|\d{1})\s(.+)\s(\d{4})/gi; /* tanggal bulan(str) tahun */
+  let format1 = /(\d{2}|\d{1})\s(januari|februari|maret|april|mei|juni|juli|agustus|september|oktober|november|desember)\s(\d{4})/gi; /* tanggal bulan(str) tahun */
   let format2 = /(\d{2}|\d{1})\/(\d{2}|\d{1})\/(\d{4})/gi; /* DD/MM/YYYY */
   let format3 = /(\d{2}|\d{1})\s?-\s?(\d{2}|\d{1})\s?-\s?(\d{4})/gi; /* DD-MM-YYYY */
 
