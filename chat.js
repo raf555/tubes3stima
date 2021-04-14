@@ -4,7 +4,7 @@ const worddb = editJsonFile("db/word.json");
 module.exports = {
   /* attr */
   jenis: worddb.get("jenis"), // jenis tugas
-  katapenting: worddb.get("penting"), // kata penting seperti deadline, dll
+  kataupdate: worddb.get("update"), // kata penting fitur update
 
   /* method */
   parse: text => {
@@ -103,7 +103,7 @@ function parse1(text) {
   const jenis = module.exports.jenis;
 
   /* getting task */
-  /* ini bisa diganti pake string matching kmp / bm */
+  /* ini bisa diganti pake string matching kmp / bm kl udh jadi */
   for (let i in jenis) {
     regex = new RegExp(jenis[i], "gi");
     let match = text.match(regex);
@@ -158,6 +158,51 @@ function parse3(text) {
 
 function parse4(text) {
   /* update tanggal */
+
+  const keyword = module.exports.kataupdate;
+  let deadlineexist, indikator, id, date;
+  let result;
+  let regex, exec;
+
+  /* checking keyword */
+  /* ini bisa diganti pake string matching kmp / bm kl udh jadi */
+  for (let i in keyword) {
+    regex = new RegExp(keyword[i], "gi");
+    let match = text.match(regex);
+    if (match != null) {
+      if (keyword[i] == "deadline") {
+        deadlineexist = true;
+      } else {
+        indikator = keyword[i];
+      }
+    }
+  }
+
+  if (!deadlineexist || !indikator) {
+    return null;
+  }
+
+  regex = /task\s(\d+)\s/gi;
+  exec = regex.exec(text);
+
+  if (exec != null) {
+    id = exec[1];
+  }
+
+  date = getdate(text);
+
+  if (!id || !date) {
+    return null;
+  }
+
+  date = date[0];
+
+  return {
+    type: "update",
+    id: id,
+    newdate: date,
+    indikator: indikator
+  };
 }
 
 function parse5(text) {
