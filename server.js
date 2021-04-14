@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 
+app.use(require("./tes.js"));
 app.use(express.static("public"));
 
 /*
