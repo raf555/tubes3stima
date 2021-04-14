@@ -10,12 +10,12 @@ module.exports = {
   parse: text => {
     let _this = module.exports;
     let parsefunc = [
-      _this.parse1,
-      _this.parse2,
-      _this.parse3,
-      _this.parse4,
-      _this.parse5,
-      _this.parse6
+      _this.parse1, // add
+      _this.parse4, // update
+      _this.parse5, // finish
+      _this.parse2, // fetch
+      _this.parse3, // find
+      _this.parse6 // help
     ];
     let i = 0;
     let parsed = null;
@@ -130,21 +130,17 @@ function parse2(text) {
 }
 
 function parse3(text) {
-  /* fetch data (full, time range, task) */
-}
-
-function parse4(text) {
   /* find data untuk suatu kuliah */
 }
 
-function parse5(text) {
+function parse4(text) {
   /* update tanggal */
 }
 
-function parse6(text) {
+function parse5(text) {
   /* update selesai */
 }
 
-function parse7(text) {
+function parse6(text) {
   /* help */
 }

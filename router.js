@@ -3,7 +3,7 @@ const express = require("express"),
   editJsonFile = require("edit-json-file"),
   chatjs = require("./chat.js");
 
-app.get("/chat", (req, res) => {
+app.get("/parsechat", (req, res) => {
   let chat = req.query.chat;
   let parsed = chatjs.parse(chat);
 
