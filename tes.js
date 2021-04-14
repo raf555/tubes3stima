@@ -10,18 +10,19 @@ app.get("/chat", (req, res) => {
 module.exports = app;
 
 function parse(text) {
-  text = text.toLowerCase()
   let task, kuliah, content, date;
   let regex, exec;
+
   /* getting task */
   for (let i in katapenting) {
     regex = new RegExp(katapenting[i], "gi");
     let match = text.match(regex);
     if (match != null) {
       task = katapenting[i];
+      break;
     }
   }
-  console.log("Task:", task);
+  //console.log("Task:", task);
 
   /* getting course */
   regex = new RegExp(task + "\\s(.+?)\\s", "gi"); /* [task]\s(.+?)\s */
@@ -29,18 +30,18 @@ function parse(text) {
   if (exec) {
     kuliah = exec[1];
   }
-  console.log("Course:", kuliah);
+  //console.log("Course:", kuliah);
 
   /* getting content */
   regex = new RegExp(
-    kuliah + "\\s(.+?)\\s(nanti|tanggal|tgl|pada|\\d\\d)",
+    kuliah + "\\s(.+?)\\s(nanti|tanggal|tgl|pada|\\s|\\d\\d)+",
     "gi"
-  ); /* [kuliah]\s(.+?)\spada */
+  ); /* [kuliah]\s(.+?)\s(nanti|tanggal|tgl|pada|\d\d)\s */
   exec = regex.exec(text);
   if (exec) {
     content = exec[1];
   }
-  console.log("Content:", content);
+  //console.log("Content:", content);
 
   /* getting date */
   let bulan = [
@@ -69,16 +70,26 @@ function parse(text) {
     exec = format3.exec(text);
   }
   date = {
-    tgl: exec[1],
-    bln:
-      (typeof exec[2] === "string"
-        ? bulan.indexOf(exec[2].toLowerCase())
-        : exec[2]) + 1,
-    thn: exec[3]
+    tgl: parseInt(exec[1]),
+    bln: isNaN(exec[2])
+      ? bulan.indexOf(exec[2].toLowerCase()) + 1
+      : parseInt(exec[2]),
+    thn: parseInt(exec[3])
   };
-  console.log("Date:", JSON.stringify(date))
+  //console.log("Date:", JSON.stringify(date));
 
-  return !!task && !!kuliah && !!content && !!date;
+  let out = {
+    task: task,
+    kuliah: kuliah,
+    konten: content,
+    tanggal: date
+  };
+
+  return !!task && !!kuliah && !!content && !!date ? out : null;
 }
 
-console.log(parse("Bot ingetin gw kl ada tubes oop tubes engimon keren 26 april 2021"));
+console.log(
+  parse(
+    "bot tolong catet nanti ada kuis oop gatau materi apaan tapi tanggal 14 april 2021"
+  )
+);
