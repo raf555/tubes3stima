@@ -1,4 +1,4 @@
 {
   "jenis": ["Kuis", "Ujian", "Tucil", "Tubes", "Praktikum"],
-  "penting": ["deadline"]
+  "update": ["deadline", "diundur", "dimajuin", "diubah"]
 }
