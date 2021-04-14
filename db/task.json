@@ -1,0 +1,23 @@
+{
+  "1": {
+    "tanggal": "14/04/2021",
+    "kuliah": "oop",
+    "jenis": "Kuis",
+    "topik": "gatau materi apaan tapi",
+    "selesai": false
+  },
+  "2": {
+    "tanggal": "21/04/2021",
+    "kuliah": "rpl",
+    "jenis": "Tubes",
+    "topik": "aplikasi skpl",
+    "selesai": false
+  },
+  "3": {
+    "tanggal": "26/04/2021",
+    "kuliah": "stima",
+    "jenis": "Tubes",
+    "topik": "bikin chatbot",
+    "selesai": false
+  }
+}
