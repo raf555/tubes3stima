@@ -1,0 +1,4 @@
+{
+  "jenis": ["Kuis", "Ujian", "Tucil", "Tubes", "Praktikum"],
+  "penting": ["deadline"]
+}
