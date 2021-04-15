@@ -1,6 +1,9 @@
 const editJsonFile = require("edit-json-file");
 const worddb = editJsonFile("db/word.json");
 
+/**
+ * Export attribut and method
+ */
 module.exports = {
   /* attr */
   jenis: worddb.get("jenis"), // jenis tugas
@@ -35,6 +38,14 @@ module.exports = {
   parse6: parse6
 };
 
+/**
+ * Mengembalikan array of date
+ *
+ * date{tgl: {int}, bln: {int}, thn: {int}}
+ * 
+ * @param {string} text untuk di-parse.
+ * @return {date} array of date yang diekstrak dari teks
+ */
 function getdate(text) {
   let bulan = [
     "januari",
@@ -95,6 +106,20 @@ function getdate(text) {
   return date;
 }
 
+/**
+ * Mengembalikan parseobj
+ * parse object
+ * {
+    type: {string},
+    task: {string},
+    kuliah: {string},
+    konten: {string},
+    tanggal: {date}
+  }
+ * 
+ * @param {string} text untuk di-parse.
+ * @return {parseobj} hasil parsing berupa object
+ */
 function parse1(text) {
   /* add task ke db */
 
@@ -156,6 +181,19 @@ function parse3(text) {
   /* find data untuk suatu kuliah */
 }
 
+/**
+ * Mengembalikan parseobj
+ * parse object
+ * {
+    type: {string},
+    id: {string},
+    newdate: {string},
+    indikator: {string}
+  }
+ * 
+ * @param {string} text untuk di-parse.
+ * @return {parseobj} hasil parsing berupa object
+ */
 function parse4(text) {
   /* update tanggal */
 

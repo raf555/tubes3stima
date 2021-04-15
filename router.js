@@ -18,6 +18,19 @@ app.get("/parsechat", (req, res) => {
   }
 });
 
+/**
+ * Memproses hasil parsing
+ * 
+ * Mereturn responseobj
+ * 
+ * {
+ * status: {string},
+ * response: {string}
+ * }
+ * 
+ * @param {string} text untuk di-parse.
+ * @return {responseobj} status hasil proses teks
+ */
 function process(parsed) {
   let result;
   let type = parsed.type;
@@ -34,6 +47,12 @@ function process(parsed) {
   return result;
 }
 
+/**
+ * Mereturn responseobj hasil proses parsing untuk fitur tambah task
+ * 
+ * @param {parseobj} parsed hasil parsing teks.
+ * @return {responseobj} hasil proses
+ */
 function add(parsed) {
   const taskdb = editJsonFile("db/task.json");
   let result, status, response;
@@ -60,6 +79,12 @@ function add(parsed) {
   return result;
 }
 
+/**
+ * Mereturn responseobj hasil proses parsing untuk fitur update tanggal
+ * 
+ * @param {parseobj} parsed hasil parsing teks.
+ * @return {responseobj} hasil proses
+ */
 function update(parsed) {
   const taskdb = editJsonFile("db/task.json");
   let result, status, response;
@@ -113,6 +138,12 @@ function update(parsed) {
   return result;
 }
 
+/**
+ * Mereturn string format tanggal
+ * 
+ * @param {date} date untuk di-parse.
+ * @return {string} tanggal
+ */
 function makedate(date) {
   // accept {tgl, bln, thn}
   let tgl = (date.tgl < 10 ? "0" : "") + date.tgl;
