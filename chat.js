@@ -8,7 +8,8 @@ module.exports = {
   /* attr */
   jenis: worddb.get("jenis"), // jenis tugas
   kataupdate: worddb.get("update"), // kata penting fitur update
-
+  katahelp: worddb.get("help"), // keyword fitur help
+  katafitur:worddb.get("fitur"), // fitur bot
   /* method */
   parse: text => {
     let _this = module.exports;
@@ -249,4 +250,61 @@ function parse5(text) {
 
 function parse6(text) {
   /* help */
+  const kword = module.exports.katahelp;
+  let katakey = module.exports.jenis;
+  for (let i in kword) {
+    if(bmSearch(text,kword[i])!=-1){
+      return{
+        type:"help",
+        fitur:module.exports.katafitur,
+        katapenting:katakey.concat(module.exports.kataupdate,kword)
+      };
+    }
+  }
+}
+
+function bmSearch(text,pattern){ // Boyer - Moore string matching, masi ver. kuliah modified dikit
+  // non case-sensitive search - convert all to lowercase
+  let ltext = text.toLowerCase(); 
+  let lpat = pattern.toLowerCase();
+
+  if(lpat.length > ltext.length){
+    return -1; // not found if pattern.len - 1 > text.len
+  }
+
+  let txtidx = lpat.length - 1; // set current text index ke idx terakhir pattern
+  let patidx = lpat.length - 1; // current pattern index
+  
+  // find last occurence idx of char in pattern 
+  let lastOcc = Array(128).fill(-1); // semacam dict untuk setiap char,value = index kemunculan terakhir pada pattern. ASCII Table len = 128
+  for (let index = 0; index < lpat.length; index++) {
+    lastOcc[lpat.charCodeAt(index)] = index; // set/update index muncul terakhir dari setiap char pada pattern
+  }
+
+  // Compare char by char
+  while (txtidx<=ltext.length - 1) {
+    if(lpat.charCodeAt(patidx) != ltext.charCodeAt(txtidx)) { // mismatch -> char jump
+      // shifting current text index 
+      if(lastOcc[ltext.charCodeAt(txtidx)] + 1 < patidx){ // case 1 & 3 : lastOcc dikiri current pattern index atau not found
+        txtidx+=lpat.length - (lastOcc[ltext.charCodeAt(txtidx)] + 1);
+      }
+      else{ // case 2 : lastOcc dikanan current pattern index
+        txtidx+=lpat.length - patidx;
+      }
+
+      patidx = lpat.length - 1; // shift current pattern index ke char terakhir pada pattern
+    }
+
+    else{ 
+      if(patidx==0){ // found
+        return txtidx;
+      } 
+      // looking glass - moving backward dari akhir string pattern
+      txtidx--; 
+      patidx--;
+    }
+
+  }
+  
+  return -1; // not found
 }
