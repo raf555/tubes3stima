@@ -131,9 +131,8 @@ function parse1(text) {
   /* getting task */
   /* ini bisa diganti pake string matching kmp / bm kl udh jadi */
   for (let i in jenis) {
-    regex = new RegExp(jenis[i], "gi");
-    let match = text.match(regex);
-    if (match != null) {
+    let match = bmSearch(text, jenis[i]);
+    if (match != -1){
       task = jenis[i];
       break;
     }
@@ -206,9 +205,8 @@ function parse4(text) {
   /* checking keyword */
   /* ini bisa diganti pake string matching kmp / bm kl udh jadi */
   for (let i in keyword) {
-    regex = new RegExp(keyword[i], "gi");
-    let match = text.match(regex);
-    if (match != null) {
+    let match = bmSearch(text, keyword[i]);
+    if (match != -1){
       if (keyword[i] == "deadline") {
         deadlineexist = true;
       } else {
