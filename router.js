@@ -20,14 +20,14 @@ app.get("/parsechat", (req, res) => {
 
 /**
  * Memproses hasil parsing
- * 
+ *
  * Mereturn responseobj
- * 
+ *
  * {
  * status: {string},
  * response: {string}
  * }
- * 
+ *
  * @param {string} text untuk di-parse.
  * @return {responseobj} status hasil proses teks
  */
@@ -49,7 +49,7 @@ function process(parsed) {
 
 /**
  * Mereturn responseobj hasil proses parsing untuk fitur tambah task
- * 
+ *
  * @param {parseobj} parsed hasil parsing teks.
  * @return {responseobj} hasil proses
  */
@@ -75,13 +75,13 @@ function add(parsed) {
     status: status,
     response: response
   };
-  
+
   return result;
 }
 
 /**
  * Mereturn responseobj hasil proses parsing untuk fitur update tanggal
- * 
+ *
  * @param {parseobj} parsed hasil parsing teks.
  * @return {responseobj} hasil proses
  */
@@ -107,27 +107,22 @@ function update(parsed) {
     curdate = new Date(`${curdate[1]}/${curdate[0]}/${curdate[2]}`).getTime();
     newdate = makedate(newdate);
 
-    if (indikator == "diubah") {
+    let condition;
+    if (indikator == "diundur") {
+      condition = newdatestamp < curdate;
+    } else if (indikator == "dimajuin") {
+      condition = newdatestamp > curdate;
+    } else if (indikator == "diubah") {
+      condition = true;
+    }
+    if (!condition) {
+      status = "error";
+      response = "Tanggal tidak valid";
+    } else {
       taskdb.set(id + ".tanggal", newdate);
       taskdb.save();
       status = "ok";
       response = "Task dengan id " + id + " berhasil diperbarui tanggalnya.";
-    } else {
-      let condition;
-      if (indikator == "diundur") {
-        condition = newdatestamp < curdate;
-      } else if (indikator == "dimajuin") {
-        condition = newdatestamp > curdate;
-      }
-      if (!condition) {
-        status = "error";
-        response = "Tanggal tidak valid";
-      } else {
-        taskdb.set(id + ".tanggal", newdate);
-        taskdb.save();
-        status = "ok";
-        response = "Task dengan id " + id + " berhasil diperbarui tanggalnya.";
-      }
     }
   }
   result = {
@@ -140,7 +135,7 @@ function update(parsed) {
 
 /**
  * Mereturn string format tanggal
- * 
+ *
  * @param {date} date untuk di-parse.
  * @return {string} tanggal
  */
