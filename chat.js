@@ -9,7 +9,7 @@ module.exports = {
   jenis: worddb.get("jenis"), // jenis tugas
   kataupdate: worddb.get("update"), // kata penting fitur update
   katahelp: worddb.get("help"), // keyword fitur help
-  katafitur:worddb.get("fitur"), // fitur bot
+  katafitur: worddb.get("fitur"), // fitur bot
   /* method */
   parse: text => {
     let _this = module.exports;
@@ -41,9 +41,10 @@ module.exports = {
 
 /**
  * Mengembalikan array of date
+ * **asumsi format seluruh tanggal pada teks adalah sama**
  *
  * date{tgl: {int}, bln: {int}, thn: {int}}
- * 
+ *
  * @param {string} text untuk di-parse.
  * @return {date} array of date yang diekstrak dari teks
  */
@@ -81,30 +82,47 @@ function getdate(text) {
   }
 
   if (exec != null) {
-    date = [
-      {
-        tgl: parseInt(exec[1]),
-        bln: isNaN(exec[2])
-          ? bulan.indexOf(exec[2].toLowerCase()) + 1
-          : parseInt(exec[2]),
-        thn: parseInt(exec[3])
-      }
-    ];
+    let tgl, bln, thn, format;
+    date = [];
+
+    tgl = parseInt(exec[1]);
+    bln = isNaN(exec[2])
+      ? bulan.indexOf(exec[2].toLowerCase()) + 1
+      : parseInt(exec[2]);
+    thn = parseInt(exec[3]);
+
+    format = `${bln}/${tgl}/${thn}`;
+
+    if (new Date(format) != "Invalid Date") {
+      date.push({
+        tgl: tgl,
+        bln: bln,
+        thn: thn
+      });
+    }
 
     let reg = [format1, format2, format3];
     let exec2;
 
     while ((exec2 = reg[type - 1].exec(text)) !== null) {
-      date.push({
-        tgl: parseInt(exec2[1]),
-        bln: isNaN(exec2[2])
-          ? bulan.indexOf(exec2[2].toLowerCase()) + 1
-          : parseInt(exec2[2]),
-        thn: parseInt(exec2[3])
-      });
+      tgl = parseInt(exec2[1]);
+      bln = isNaN(exec2[2])
+        ? bulan.indexOf(exec2[2].toLowerCase()) + 1
+        : parseInt(exec2[2]);
+      thn = parseInt(exec2[3]);
+      format = `${bln}/${tgl}/${thn}`;
+
+      if (new Date(format) != "Invalid Date") {
+        date.push({
+          tgl: tgl,
+          bln: bln,
+          thn: thn
+        });
+      }
     }
   }
-  return date;
+
+  return date.length > 0 ? date : null;
 }
 
 /**
@@ -132,7 +150,7 @@ function parse1(text) {
   /* ini bisa diganti pake string matching kmp / bm kl udh jadi */
   for (let i in jenis) {
     let match = bmSearch(text, jenis[i]);
-    if (match != -1){
+    if (match != -1) {
       task = jenis[i];
       break;
     }
@@ -206,7 +224,7 @@ function parse4(text) {
   /* ini bisa diganti pake string matching kmp / bm kl udh jadi */
   for (let i in keyword) {
     let match = bmSearch(text, keyword[i]);
-    if (match != -1){
+    if (match != -1) {
       if (keyword[i] == "deadline") {
         deadlineexist = true;
       } else {
@@ -251,58 +269,59 @@ function parse6(text) {
   const kword = module.exports.katahelp;
   let katakey = module.exports.jenis;
   for (let i in kword) {
-    if(bmSearch(text,kword[i])!=-1){
-      return{
-        type:"help",
-        fitur:module.exports.katafitur,
-        katapenting:katakey.concat(module.exports.kataupdate,kword)
+    if (bmSearch(text, kword[i]) != -1) {
+      return {
+        type: "help",
+        fitur: module.exports.katafitur,
+        katapenting: katakey.concat(module.exports.kataupdate, kword)
       };
     }
   }
 }
 
-function bmSearch(text,pattern){ // Boyer - Moore string matching, masi ver. kuliah modified dikit
+function bmSearch(text, pattern) {
+  // Boyer - Moore string matching, masi ver. kuliah modified dikit
   // non case-sensitive search - convert all to lowercase
-  let ltext = text.toLowerCase(); 
+  let ltext = text.toLowerCase();
   let lpat = pattern.toLowerCase();
 
-  if(lpat.length > ltext.length){
+  if (lpat.length > ltext.length) {
     return -1; // not found if pattern.len - 1 > text.len
   }
 
   let txtidx = lpat.length - 1; // set current text index ke idx terakhir pattern
   let patidx = lpat.length - 1; // current pattern index
-  
-  // find last occurence idx of char in pattern 
+
+  // find last occurence idx of char in pattern
   let lastOcc = Array(128).fill(-1); // semacam dict untuk setiap char,value = index kemunculan terakhir pada pattern. ASCII Table len = 128
   for (let index = 0; index < lpat.length; index++) {
     lastOcc[lpat.charCodeAt(index)] = index; // set/update index muncul terakhir dari setiap char pada pattern
   }
 
   // Compare char by char
-  while (txtidx<=ltext.length - 1) {
-    if(lpat.charCodeAt(patidx) != ltext.charCodeAt(txtidx)) { // mismatch -> char jump
-      // shifting current text index 
-      if(lastOcc[ltext.charCodeAt(txtidx)] + 1 < patidx){ // case 1 & 3 : lastOcc dikiri current pattern index atau not found
-        txtidx+=lpat.length - (lastOcc[ltext.charCodeAt(txtidx)] + 1);
-      }
-      else{ // case 2 : lastOcc dikanan current pattern index
-        txtidx+=lpat.length - patidx;
+  while (txtidx <= ltext.length - 1) {
+    if (lpat.charCodeAt(patidx) != ltext.charCodeAt(txtidx)) {
+      // mismatch -> char jump
+      // shifting current text index
+      if (lastOcc[ltext.charCodeAt(txtidx)] + 1 < patidx) {
+        // case 1 & 3 : lastOcc dikiri current pattern index atau not found
+        txtidx += lpat.length - (lastOcc[ltext.charCodeAt(txtidx)] + 1);
+      } else {
+        // case 2 : lastOcc dikanan current pattern index
+        txtidx += lpat.length - patidx;
       }
 
       patidx = lpat.length - 1; // shift current pattern index ke char terakhir pada pattern
-    }
-
-    else{ 
-      if(patidx==0){ // found
+    } else {
+      if (patidx == 0) {
+        // found
         return txtidx;
-      } 
+      }
       // looking glass - moving backward dari akhir string pattern
-      txtidx--; 
+      txtidx--;
       patidx--;
     }
-
   }
-  
+
   return -1; // not found
 }
