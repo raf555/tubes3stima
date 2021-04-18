@@ -280,13 +280,13 @@ function parse6(text) {
 }
 
 function bmSearch(text, pattern) {
-  // Boyer - Moore string matching, masi ver. kuliah modified dikit
+  // Boyer - Moore string matching - backward searching
   // non case-sensitive search - convert all to lowercase
   let ltext = text.toLowerCase();
   let lpat = pattern.toLowerCase();
 
   if (lpat.length > ltext.length) {
-    return -1; // not found if pattern.len - 1 > text.len
+    return -1; // not found if pattern.len  > text.len
   }
 
   let txtidx = lpat.length - 1; // set current text index ke idx terakhir pattern
@@ -324,4 +324,57 @@ function bmSearch(text, pattern) {
   }
 
   return -1; // not found
+}
+
+function kmpSearch(text,pattern){
+  // Knuth-Morris-Pratt string matching - forward searching
+  // non case-sensitive search - convert all to lowercase
+  let ltext = text.toLowerCase();
+  let lpat = pattern.toLowerCase();
+
+  if (lpat.length > ltext.length) {
+    return -1; // not found if pattern.len  > text.len
+  }
+  // find Failure Function
+  // F[j] = length of longest possible prefix of Pattern that is a suffix of Pattern[i..j]
+  let F = Array(lpat.length) // Failure func
+  // i, j pattern index (untuk dicocokkan char pada index tersebut)
+  let i = 1;
+  let j = 0; 
+  while(i < lpat.length){
+
+    if(lpat.charCodeAt(i) == lpat.charCodeAt(j)){ // match
+      F[i] = j + 1; i++; j++;
+    }
+    else { // prefix length count interrupted (ada mismatch)
+
+      if(j > 0) j = F[j-1]; 
+      else{
+        F[i] = 0; i++;
+      }
+
+    }
+  }
+
+
+  // Find pattern starting index at text 
+  txtidx = 0; // text index
+  patidx = 0; // pattern index
+  while (txtidx < ltext.length) {
+    // Compare char by char
+    if(ltext.charCodeAt(txtidx) == lpat.charCodeAt(patidx)){
+      if(patidx == lpat.length - 1) return (txtidx + 1 - lpat.length); // found, mencapai akhir string pattern
+      txtidx++;
+      patidx++;
+    }
+
+    else{ // mismatch
+      if(patidx > 0) patidx = F[patidx-1];
+      else txtidx++;
+    }
+  }
+
+
+  return -1; // not found
+
 }
