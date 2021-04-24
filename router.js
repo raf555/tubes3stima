@@ -3,11 +3,18 @@ const express = require("express"),
   editJsonFile = require("edit-json-file"),
   chatjs = require("./chat.js");
 
-app.get("/parsechat", (req, res) => {
-  let chat = req.query.chat;
-  let parsed = chatjs.parse(chat);
+app.post("/parsechat", (req, res) => {
+  let chat = req.body.chat;
+  let err = false;
+  let parsed;
 
-  if (parsed == null) {
+  try {
+    parsed = chatjs.parse(chat);
+  } catch (e) {
+    err = true;
+  }
+
+  if (!chat || err || !parsed) {
     res.json({
       status: "error",
       response: "Maaf pesan tidak dikenali."
@@ -109,10 +116,10 @@ function update(parsed) {
 
     let condition;
     if (indikator == "diundur") {
-      condition = newdatestamp < curdate;
-    } else if (indikator == "dimajuin") {
       condition = newdatestamp > curdate;
-    } else if (indikator == "diubah") {
+    } else if (indikator == "dimajuin") {
+      condition = newdatestamp < curdate;
+    } else if (indikator == "diubah" || indikator == "revisi") {
       condition = true;
     }
     if (!condition) {
