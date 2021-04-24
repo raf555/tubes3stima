@@ -29,6 +29,7 @@ $(document).ready(function() {
     <span class="my-msg">${input}</span>
     <div class="avatar"> <i class="material-icons"> account_circle </i></div>`;
     chatArea.insertAdjacentHTML("beforeend", temp);
+    textArea.value = "";
 
     $.post(
       "/parsechat",
@@ -41,10 +42,8 @@ $(document).ready(function() {
             <span class="msg">${res.response}</span>
         </div>`;
         chatArea.insertAdjacentHTML("beforeend", temp2);
+        $(chatArea).scrollTop(chatArea.scrollHeight);
       }
     );
-
-    textArea.value = "";
-    $(chatArea).scrollTop(300);
   }
 });
