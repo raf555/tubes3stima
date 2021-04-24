@@ -1,0 +1,240 @@
+*{
+    box-sizing: border-box;
+}
+
+button{
+    border:none;
+    outline: none;
+    cursor: pointer;
+}
+
+body{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #e5e5e5;
+    scrollbar-width: none;
+    /* display: flex;
+    justify-content: center;
+    height: 100vh;
+    width: 100%; */
+}
+
+section{
+    max-width: 1100px;
+    margin: auto;
+    text-align: center;
+    padding: 0 1rem;
+}
+h1{
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+
+p{
+    font-size: 2rem;
+}
+
+
+
+.send:hover{
+    opacity: 1;
+}
+
+.chat-area{
+    height: 520px;
+    padding-top: 64px;
+    overflow:hidden;
+}
+
+.income-msg{
+    display: flex;
+    align-items: center;
+}
+
+.avatar{
+    width:45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.income-msg .msg{
+    background-color: #263238;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding:0.5rem;
+    border-radius: 25px;
+    margin-left: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+
+.input-area{
+    position: fixed;
+    display: block;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #fff;
+    color: white;
+    padding:0.5rem;
+    margin-bottom:1rem;
+    border-radius: 25px;
+    /* margin-left: 1rem; */
+    /* box-shadow: 0 2px 5px rgba(0,0,0,0.4); */
+}
+
+.input-area:focus{
+    outline: none;
+}
+
+.input-area textarea:focus{
+    outline: none;
+}
+
+.input-area textarea[type="text"]{
+    position: relative;
+    display: block;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    /* height: 64px; */
+    border: none;
+    border-color: none;
+    background: #fff;
+    width: calc(100% - 64px);
+    margin-left: auto;
+    margin-right: 4rem;
+    margin-bottom: auto;
+    margin-top: auto;
+    -ms-overflow-style: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* position: relative;
+    display: block;
+    background: #fff;
+    border: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-color: none;
+    width: calc(100% - 64px); 
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-top: auto;
+    position:absolute; */
+    left: 0;
+    top: 0;
+    bottom: 0;
+    resize: none;
+    overflow-x:hidden;
+    overflow-y: scroll;
+    font-weight: 300;
+    scrollbar-width: none;
+}
+.input-area textarea::-webkit-scrollbar{
+    display: none;
+    width: none;
+}
+
+.disabled{
+    pointer-events: none;
+    opacity: 0.2;
+}
+
+
+.input-area .send{
+    position: fixed;
+    height: 42.6666666667px;
+    width: 42.6666666667px;
+    border-radius: 50%;
+    border: 0;
+    background: #263238;
+    color: #fff;
+    bottom: 25.6666666667px;
+    right: 15.6666666667px;
+}
+
+.input-area .send:hover{
+    cursor: pointer;
+}
+
+.out-msg{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.my-msg{
+    display: flex;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-content: flex-end;
+    margin: 0.75rem;
+    padding: 0.5rem;
+    background-color: #ddd;
+    border-radius: 25px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    word-break: break-all;
+}
+
+
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    z-index: 100;
+    transition: 0.3s ease;
+}
+.nav .default-nav {
+    height: 64px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 110;
+    background-color: #263238;
+    border-bottom: 3px solid #263238;
+    color: #fff;
+    -webkit-box-shadow: 0px 3px 3px 0px rgba(50, 50, 50, 0.1);
+    -moz-box-shadow: 0px 3px 3px 0px rgba(50, 50, 50, 0.1);
+    box-shadow: 0px 3px 3px 0px rgba(50, 50, 50, 0.1);
+    transition: 0.3s ease;
+}
+.nav .default-nav .main-nav {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 64px;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    transition: 0.3s ease;
+}
+.nav .default-nav .main-nav .avatar {
+    height: 32px;
+    width: 32px;
+    background-size: contain;
+    margin: 16px;
+    float: left;
+}
+
+.nav .default-nav .main-nav .main-nav-item {
+    float: left;
+    height: 64px;
+    margin-right: 50px;
+    position: relative;
+    line-height: 64px;
+    transition: 0.3s ease;
+}
+/* .nav .default-nav .main-nav .main-nav-item .main-nav-item-link {
+    display: block;
+    position: relative;
+    height: 64px;
+    width: 100%;
+    text-align: center;
+    line-height: 64px;
+    text-decoration: none;
+    color: inherit;
+    transition: 0.3s ease;
+} */
