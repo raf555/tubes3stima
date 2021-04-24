@@ -13,13 +13,18 @@ $(document).ready(function() {
 
   function submit(event) {
     if (event.keyCode == 13 && !event.shiftKey) {
-      event.preventDefault();
       sendmsg(event);
+      event.preventDefault();
     }
   }
 
   function sendmsg(event) {
     let input = textArea.value;
+    if (!input || input == ""){
+      return;
+    }
+
+    
     let temp = `<div class="out-msg">
     <span class="my-msg">${input}</span>
     <div class="avatar"> <i class="material-icons"> account_circle </i></div>`;
