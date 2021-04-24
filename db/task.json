@@ -33,5 +33,12 @@
     "jenis": "Tucil",
     "topik": "bikin graf",
     "selesai": false
+  },
+  "6": {
+    "tanggal": "30/04/2021",
+    "kuliah": "stima",
+    "jenis": "Tubes",
+    "topik": "bikin chatbot",
+    "selesai": false
   }
 }
