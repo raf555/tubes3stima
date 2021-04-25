@@ -1,5 +1,6 @@
 {
   "jenis": ["Kuis", "Ujian", "Tucil", "Tubes", "Praktikum"],
+  "fetch": ["deadline", "sejauh ini", "hari ini", "hari ke depan", "minggu ke depan", "antara"],
   "update": ["deadline", "diundur", "dimajuin", "diubah", "revisi"],
   "help": ["help","tolong","fitur","bisa","keyword","kata penting"],
   "fitur": ["Menambahkan task baru","Melihat daftar task","Menampilkan deadline","Update task","Menandai task sudah selesai","Menampilkan kata kunci"]

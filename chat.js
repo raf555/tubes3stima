@@ -7,6 +7,7 @@ const worddb = editJsonFile("db/word.json");
 module.exports = {
   /* attr */
   jenis: worddb.get("jenis"), // jenis tugas
+  katafetch: worddb.get("fetch"),
   kataupdate: worddb.get("update"), // kata penting fitur update
   katahelp: worddb.get("help"), // keyword fitur help
   katafitur: worddb.get("fitur"), // fitur bot
@@ -191,8 +192,129 @@ function parse1(text) {
   return !!task && !!kuliah && !!content && !!date ? out : null;
 }
 
+/**
+ * Mengembalikan parseobj
+ * parse object
+ * {
+    type: {string},
+    jenis: {string},
+    rangeawal: {string},
+    rangeakhir: {string}
+  }
+ * 
+ * @param {string} text untuk di-parse.
+ * @return {parseobj} hasil parsing berupa object
+ */
 function parse2(text) {
   /* fetch data (full, time range, task) */
+  
+  const keyword = module.exports.katafetch;
+  const keyjenis = module.exports.jenis;
+  let tipe, jenis;
+
+  /* getting jenis */
+  for (let i in keyjenis) {
+    let match = bmSearch(text, keyjenis[i]);
+    if (match != -1) {
+      jenis = keyjenis[i];
+      break;
+    }
+  }
+
+  /* getting tipe fetch */
+  for (let i in keyword) {
+    let match = bmSearch(text, keyword[i]);
+    if (match != -1) {
+      /* cek jika jenisnya semua */
+      if (match == "deadline") {
+        if (jenis == null) {
+          jenis = "semua";
+        }
+        continue;
+      }
+
+      tipe = keyword[i];
+      break;
+    }
+  }
+
+  /* return checker sejauh ini */
+  if (tipe == "sejauh ini") {
+    let out = {
+      type: "fetch",
+      jenis: jenis,
+      tipefetch: "all"
+    };
+    return !!jenis ? out : null;
+  }
+
+  /* return checker hari ini */
+  if (tipe == "hari ini") {
+    let date = new Date();
+    date = date.setDate()
+    let out = {
+      type: "fetch",
+      jenis: jenis,
+      tipefetch: "incr",
+      incr: 0
+    };
+    return !!jenis ? out : null;
+  }
+
+  /* return checker N hari ke depan */
+  if (tipe == "hari ke depan") {
+    let N;
+    let regex = new RegExp("\\s(\\d|\\d\\d)\\shari\\ske\\sdepan");
+    let exec = regex.exec(text);
+    if (exec == null) {
+      return null;
+    }
+    N = exec[1];
+    let out = {
+      type: "fetch",
+      jenis: jenis,
+      tipefetch: "incr",
+      incr: parseInt(N,10)
+    };
+    return !!jenis ? out : null;
+  }
+
+  /* return checker N minggu ke depan */
+  if (tipe == "minggu ke depan") {
+    let N;
+    let regex = new RegExp("\\s(\\d|\\d\\d)\\sminggu\\ske\\sdepan");
+    let exec = regex.exec(text);
+    if (exec == null) {
+      return null;
+    }
+    N = exec[1];
+    let out = {
+      type: "fetch",
+      jenis: jenis,
+      tipefetch: "incr",
+      incr: parseInt(N*7,10)
+    };
+    return !!jenis ? out : null;
+  }
+
+  /* return checker antara DATE_1 dan DATE_2 */
+  if (tipe == "antara") {
+    let date = getdate(text);
+    if (date == null) {
+      return null;
+    }
+    let out = {
+      type: "fetch",
+      jenis: jenis,
+      tipefetch: "range",
+      range0: date[0],
+      range1: date[1]
+    };
+    return !!jenis ? out : null;
+  }
+
+  /* else */
+  return null;
 }
 
 function parse3(text) {

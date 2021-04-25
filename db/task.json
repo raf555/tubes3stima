@@ -40,5 +40,12 @@
     "jenis": "Tubes",
     "topik": "bikin chatbot",
     "selesai": false
+  },
+  "7": {
+    "tanggal": "14/04/2021",
+    "kuliah": "IF2211",
+    "jenis": "Tubes",
+    "topik": "String Matching",
+    "selesai": false
   }
 }

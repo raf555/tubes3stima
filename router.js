@@ -47,6 +47,7 @@ function process(parsed) {
     result = update(parsed);
   } else if (type == "finish") {
   } else if (type == "fetch") {
+    result = fetch(parsed);
   } else if (type == "find") {
   } else if (type == "help") {
   }
@@ -140,6 +141,28 @@ function update(parsed) {
   return result;
 }
 
+function fetch(parsed) {
+  const taskdb = editJsonFile("db/task.json");
+  const x = json.parse("db/task.json");
+  
+  let result, status, response;
+
+  let filter = parsed.jenis;
+  let tipefetch = parsed.tipefetch;
+
+  // if (tipefetch == "all") {
+
+  // } else if (tipefetch == "incr") {
+
+  // } else if (tipefetch == "range") {
+
+  // }
+  result = {
+    status : "ok",
+    response: "anjay"
+  };
+  return result;
+}
 /**
  * Mereturn string format tanggal
  *
