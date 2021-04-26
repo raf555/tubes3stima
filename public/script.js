@@ -27,7 +27,7 @@ $(document).ready(function() {
     
     let temp = `<div class="out-msg">
     <span class="my-msg">${input}</span>
-    <div class="avatar"> <i class="material-icons"> account_circle </i></div>`;
+    <img src="assets/botan.png" class="avatar" alt="" />`;
     chatArea.insertAdjacentHTML("beforeend", temp);
     textArea.value = "";
 

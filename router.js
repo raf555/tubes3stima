@@ -46,10 +46,12 @@ function process(parsed) {
   } else if (type == "update") {
     result = update(parsed);
   } else if (type == "finish") {
+    result = finish(parsed);
   } else if (type == "fetch") {
     result = fetch(parsed);
   } else if (type == "find") {
   } else if (type == "help") {
+    result = help(parsed)
   }
 
   return result;
@@ -177,5 +179,72 @@ function makedate(date) {
 
   return `${tgl}/${bln}/${thn}`;
 }
+
+/**
+ * Mereturn responseobj hasil proses parsing untuk fitur finish task
+ *
+ * @param {parseobj} parsed hasil parsing teks.
+ * @return {responseobj} hasil proses
+ */
+function finish(parsed){
+  const taskdb = editJsonFile("db/task.json");
+  let result, status, response;
+
+  // update fi
+  let id = parsed.id;
+ 
+  let target = taskdb.get(id);
+
+  if (!target) {
+    status = "error";
+    response = "Maaf, Task dengan id " + id + " tidak ditemukan.";
+  }
+  else{
+    let condition;
+    if(target.selesai == false){
+      condition = true;
+    }
+    else condition = false;
+
+    if (!condition) {
+      status = "error";
+      response = "Maaf, Task dengan id " + id + " sudah pernah diselesaikan sebelumnya";
+    } else {
+      taskdb.set(id + ".selesai", true);
+      taskdb.save();
+      status = "ok";
+      response = "Berhasil! Task dengan id " + id + " selesai dikerjakan";
+    }
+  }
+  result = {
+    status: status,
+    response: response
+  };
+
+  return result;
+}
+
+/**
+ * Mereturn responseobj hasil proses parsing untuk fitur help
+ *
+ * @param {parseobj} parsed hasil parsing teks.
+ * @return {responseobj} hasil proses
+ */
+
+function help(parsed){
+  let fitur = '[Fitur]<br>';
+  for (let index = 0; index < parsed.fitur.length; index++) fitur+='  '+(index+1)+'. '+parsed.fitur[index]+'<br>';
+  let penting = '[Daftar Kata Penting]<br>';
+  for (let index = 0; index < parsed.katapenting.length; index++) penting+='  '+(index+1)+'. '+parsed.katapenting[index]+'<br>';
+  let resp = fitur + penting;
+  console.log(resp)
+  result = {
+    status : "ok",
+    response : resp
+  }
+  return result;
+}
+
+console.log(help(chatjs.parse("help")));
 
 module.exports = app;

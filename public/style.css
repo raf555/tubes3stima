@@ -41,11 +41,12 @@ p{
 }
 
 .chat-area{
-    height: 660px;
+    height: 85vh;
     padding-top: 64px;
     overflow-x:hidden;
     overflow-y: scroll;
     scrollbar-width: none;
+    position: relative;
 }
 
 .income-msg{
@@ -112,18 +113,6 @@ p{
     margin-top: auto;
     -ms-overflow-style: none;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* position: relative;
-    display: block;
-    background: #fff;
-    border: none;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    border-color: none;
-    width: calc(100% - 64px); 
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: auto;
-    margin-top: auto;
-    position:absolute; */
     left: 0;
     top: 0;
     bottom: 0;
@@ -229,14 +218,21 @@ p{
     line-height: 64px;
     transition: 0.3s ease;
 }
-/* .nav .default-nav .main-nav .main-nav-item .main-nav-item-link {
-    display: block;
-    position: relative;
-    height: 64px;
-    width: 100%;
-    text-align: center;
-    line-height: 64px;
-    text-decoration: none;
-    color: inherit;
-    transition: 0.3s ease;
-} */
+.nav .default-nav .main-nav .github {
+    height: 32px;
+    width: 32px;
+    background-size: contain;
+    margin: 16px;
+    margin-top: 20px;
+    position: absolute;
+    right: 0;
+}
+.nav .default-nav .main-nav .github a{
+    color:#fff;
+}
+.nav .default-nav .main-nav .github a:hover{
+    cursor:pointer;
+}
+.nav .default-nav .main-nav .github:hover {
+    cursor: pointer;
+}

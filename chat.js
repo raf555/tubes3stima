@@ -11,6 +11,7 @@ module.exports = {
   kataupdate: worddb.get("update"), // kata penting fitur update
   katahelp: worddb.get("help"), // keyword fitur help
   katafitur: worddb.get("fitur"), // fitur bot
+  katafinish : worddb.get("finish"),
   /* method */
   parse: text => {
     let _this = module.exports;
@@ -123,7 +124,8 @@ function getdate(text) {
     }
   }
 
-  return date.length > 0 ? date : null;
+  if(date!=null) return date.length > 0 ? date : null;
+  else return null;
 }
 
 /**
@@ -381,21 +383,60 @@ function parse4(text) {
     indikator: indikator
   };
 }
-
+/**
+ * Mengembalikan parseobj
+ * parse object
+ * {
+    type: {string},
+    id : {string}
+  }
+ * 
+ * @param {string} text untuk di-parse.
+ * @return {parseobj} hasil parsing berupa object
+ */
 function parse5(text) {
-  /* update selesai */
+  /* update selesai - finish */
+  const keyword = module.exports.katafinish;
+  let updatefinish, id;
+  let regex, exec;
+
+  /* checking keyword */
+  /* ini bisa diganti pake string matching kmp / bm kl udh jadi */
+  for (let i in keyword) {
+    let match = bmSearch(text, keyword[i]);
+    if (match != -1) {
+        updatefinish = true;
+    }
+  }
+  regex = /task\s(\d+)/gi;
+  exec = regex.exec(text);
+
+  if (exec != null) {
+    id = exec[1];
+  }
+
+  if (!updatefinish) {
+    return null;
+  }
+
+  return {
+    type: "finish",
+    id: id
+  };
+
 }
 
 function parse6(text) {
   /* help */
-  const kword = module.exports.katahelp;
-  let katakey = module.exports.jenis;
-  for (let i in kword) {
-    if (bmSearch(text, kword[i]) != -1) {
+  const katahelp = module.exports.katahelp;
+  for (let i in katahelp) {
+    if (bmSearch(text, katahelp[i]) != -1) {
+      let katakey = module.exports.jenis.concat(module.exports.kataupdate,katahelp,module.exports.katafetch,module.exports.katafinish);
+      katakey.sort();
       return {
         type: "help",
         fitur: module.exports.katafitur,
-        katapenting: katakey.concat(module.exports.kataupdate, kword)
+        katapenting: katakey
       };
     }
   }
@@ -500,3 +541,5 @@ function kmpSearch(text,pattern){
   return -1; // not found
 
 }
+
+// console.log(module.exports.parse("task 1 selesai dikerjakan"));
