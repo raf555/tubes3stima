@@ -229,7 +229,7 @@ function parse2(text) {
     let match = bmSearch(text, keyword[i]);
     if (match != -1) {
       /* cek jika jenisnya semua */
-      if (match == "deadline") {
+      if (keyword[i] == "deadline") {
         if (jenis == null) {
           jenis = "semua";
         }
