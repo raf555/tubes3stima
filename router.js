@@ -237,14 +237,11 @@ function help(parsed){
   let penting = '[Daftar Kata Penting]<br>';
   for (let index = 0; index < parsed.katapenting.length; index++) penting+='  '+(index+1)+'. '+parsed.katapenting[index]+'<br>';
   let resp = fitur + penting;
-  console.log(resp)
   let result = {
     status : "ok",
     response : resp
   }
   return result;
 }
-
-console.log(help(chatjs.parse("help")));
 
 module.exports = app;
