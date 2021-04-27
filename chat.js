@@ -457,7 +457,7 @@ function parse6(text) {
  * 
  * @param {string} text string input
  * @param {string} pattern pattern untuk dicek apakah berada dalam text
- * @return {boolean} boolean indikator apakah string match atau tidak dengan pattern
+ * @return {int} index kemunculan pertama pattern pada text atau -1 jika tidak ditemukan
  */
 function bmSearch(text, pattern) {
   // Boyer - Moore string matching - backward searching
@@ -510,7 +510,7 @@ function bmSearch(text, pattern) {
  * 
  * @param {string} text string input
  * @param {string} pattern pattern untuk dicek apakah berada dalam text
- * @return {boolean} boolean indikator apakah string match atau tidak dengan pattern
+ * @return {int} index kemunculan pertama pattern pada text atau -1 jika tidak ditemukan
  */
 function kmpSearch(text,pattern){
   // Knuth-Morris-Pratt string matching - forward searching
@@ -628,8 +628,8 @@ function findSimilar(text){
 
 }
 
-let text = "dedline";
-let pattern = "FF";
-console.log(Levenshtein(text,pattern));
-console.log(findSimilar(text));
+// let text = "dedline";
+// let pattern = "FF";
+// console.log(Levenshtein(text,pattern));
+// console.log(findSimilar(text));
 // console.log(module.exports.parse("task 1 selesai dikerjakan"));
