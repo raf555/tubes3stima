@@ -226,7 +226,7 @@ p{
     margin: 16px;
     margin-top: 20px;
     position: absolute;
-    right: 0;
+    right: 60px;
 }
 .nav .default-nav .main-nav .github a{
     color:#fff;
@@ -235,5 +235,24 @@ p{
     cursor:pointer;
 }
 .nav .default-nav .main-nav .github:hover {
+    cursor: pointer;
+}
+
+.nav .default-nav .main-nav .delhist {
+    height: 32px;
+    width: 32px;
+    background-size: contain;
+    margin: 16px;
+    margin-top: 22px;
+    position: absolute;
+    right: 0;
+}
+.nav .default-nav .main-nav .delhist a{
+    color:#fff;
+}
+.nav .default-nav .main-nav .delhist a:hover{
+    cursor:pointer;
+}
+.nav .default-nav .main-nav .delhist:hover {
     cursor: pointer;
 }

@@ -2,6 +2,7 @@ $(document).ready(function() {
   const send = document.querySelector(".send");
   const chatArea = document.querySelector(".chat-area");
   const textArea = document.querySelector("textarea");
+  const delhist = document.querySelector(".delhist");
 
   /* history chat */
   if (localStorage.getItem("history") != null) {
@@ -16,6 +17,7 @@ $(document).ready(function() {
 
   /* event listener */
   $(send).on("click", sendmsg);
+  $(delhist).on("click", removeHistory);
 
   /* methods */
   function removeHistory(){
