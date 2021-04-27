@@ -612,7 +612,21 @@ function findSimilar(text) {
     module.exports.kataupdate,
     module.exports.katahelp,
     module.exports.katafetch,
-    module.exports.katafinish
+    module.exports.katafinish,
+    [
+      "januari",
+      "februari",
+      "maret",
+      "april",
+      "mei",
+      "juni",
+      "juli",
+      "agustus",
+      "september",
+      "oktober",
+      "november",
+      "desember"
+    ]
   );
   let maxsim;
   let lev;
