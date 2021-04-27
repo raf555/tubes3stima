@@ -46,7 +46,7 @@ $(document).ready(function() {
     };
 
     let temp = `<div class="out-msg">
-    <span class="my-msg">${input}</span>
+    <span class="my-msg">${removenewline(input)}</span>
     <img src="https://media-exp1.licdn.com/dms/image/C510BAQF29VPd4q7H9w/company-logo_200_200/0/1525360759270?e=2159024400&v=beta&t=2vZsqlINJsQHgU5a0I7hwURaHpvUedhdcwwJYuo-thI" class="avatar" alt="" />`;
     chatArea.insertAdjacentHTML("beforeend", temp);
     textArea.value = "";
