@@ -184,8 +184,6 @@ function fetch(parsed) {
   } else if (tipefetch == "range") {
     rangeawal = makedate(parsed.range0);
     rangeakhir = makedate(parsed.range1);
-    console.log(rangeawal);
-    console.log(rangeakhir);
     result = fetchtaskrange(filter, rangeawal, rangeakhir);
   }
 
@@ -319,13 +317,6 @@ function fetchtaskrange(filter, rangeawal, rangeakhir) {
       let masuklist1 = taskdb.get(id[i]+".selesai") == false; 
       // task masuk range tanggal
       let masuklist2 = firstdate <= taskdate && taskdate <= lastdate;
-
-      console.log(firstdate);
-      console.log(curdate);
-      console.log(taskdate);
-      console.log(lastdate);
-      console.log(masuklist1);
-      console.log(masuklist2);
 
       if (masuklist1 && masuklist2) {
         let tempdate = taskdb.get(id[i]+".tanggal");
