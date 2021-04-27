@@ -3,6 +3,7 @@ $(document).ready(function() {
   const chatArea = document.querySelector(".chat-area");
   const textArea = document.querySelector("textarea");
 
+  /* history chat */
   if (localStorage.getItem("history") != null) {
     $(chatArea).html(localStorage.getItem("history"));
     $(chatArea).scrollTop(chatArea.scrollHeight);
@@ -16,6 +17,12 @@ $(document).ready(function() {
   /* event listener */
   $(send).on("click", sendmsg);
 
+  /* methods */
+  function removeHistory(){
+    localStorage.removeItem("history");
+    location.reload();
+  }
+
   function submit(event) {
     if (event.keyCode == 13 && !event.shiftKey) {
       sendmsg(event);
@@ -25,12 +32,12 @@ $(document).ready(function() {
 
   function sendmsg(event) {
     let input = textArea.value;
+    
     if (!input || input == "") {
       return;
     }
     if (input.toLowerCase() == "clear") {
-      localStorage.removeItem("history");
-      location.reload();
+      removeHistory();
       return;
     }
 
@@ -40,7 +47,7 @@ $(document).ready(function() {
 
     let temp = `<div class="out-msg">
     <span class="my-msg">${input}</span>
-    <img src="assets/botan.png" class="avatar" alt="" />`;
+    <img src="https://media-exp1.licdn.com/dms/image/C510BAQF29VPd4q7H9w/company-logo_200_200/0/1525360759270?e=2159024400&v=beta&t=2vZsqlINJsQHgU5a0I7hwURaHpvUedhdcwwJYuo-thI" class="avatar" alt="" />`;
     chatArea.insertAdjacentHTML("beforeend", temp);
     textArea.value = "";
 
