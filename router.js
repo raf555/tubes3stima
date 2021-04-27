@@ -197,6 +197,11 @@ function finish(parsed) {
   // update fi
   let id = parsed.id;
 
+  if(id == -1) 
+    return{
+      status: "error",
+      response: "Maaf, Anda belum mendefinisikan id task"
+  }
   let target = taskdb.get(id);
 
   if (!target) {

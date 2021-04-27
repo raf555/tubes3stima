@@ -419,6 +419,13 @@ function parse5(text) {
   if (!updatefinish) {
     return null;
   }
+  
+  if(exec==null){
+    return {
+      type:"finish",
+      id: -1
+    }
+  }
 
   return {
     type: "finish",
