@@ -320,8 +320,52 @@ function parse2(text) {
   return null;
 }
 
+/**
+ * Asumsi semua tugas unique
+ */
 function parse3(text) {
   /* find data untuk suatu kuliah */
+
+  const keyword = ["Tubes", "Tucil"];
+  let task, kuliah;
+  let regex, exec;
+  let match;
+
+  // get keyword "deadline"
+  match = bmSearch(text,"deadline");
+  if (match == -1) {
+    return null;
+  }
+
+  // get keyword "kapan"
+  match = bmSearch(text, "kapan");
+  if (match == -1) {
+    return null;
+  }
+
+  // get tipe task
+  for (let i in keyword) {
+    match = bmSearch(text, keyword[i]);
+    if (match != -1) {
+      task = keyword[i];
+      break;
+    }
+  }
+
+  // get matkul
+  regex = new RegExp(task + "\\s(.+?)\\s", "gi");
+  exec = regex.exec(text);
+  if (exec) {
+    kuliah = exec[1];
+  }
+
+  let out = {
+    type: "find",
+    task: task,
+    kuliah: kuliah
+  }
+
+  return !!task && !!kuliah ? out : null;
 }
 
 /**

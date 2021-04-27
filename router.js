@@ -54,6 +54,7 @@ function process(parsed) {
   } else if (type == "fetch") {
     result = fetch(parsed);
   } else if (type == "find") {
+    result = find(parsed);
   } else if (type == "help") {
     result = help(parsed);
   }
@@ -194,7 +195,7 @@ function fetch(parsed) {
  * fetch task tanpa range
  * 
  * @param {string} filter 
- * @return {parseobj} 
+ * @return {responseobj} 
  */
 function fetchtask(filter) {
   const taskdb = editJsonFile("db/task.json");
@@ -241,7 +242,7 @@ function fetchtask(filter) {
       taskdate = new Date(`${taskdate[1]}/${taskdate[0]}/${taskdate[2]}`).getTime();
       
       // task belum selesai dan sesuai jenis
-      let masuklist1 = taskdb.get(id[i]+".selesai") == false && taskdb.get(id[i]+".jenis") == filter;
+      let masuklist = taskdb.get(id[i]+".selesai") == false && taskdb.get(id[i]+".jenis") == filter;
 
       if (masuklist) {
         let tempdate = taskdb.get(id[i]+".tanggal");
@@ -282,7 +283,7 @@ function fetchtask(filter) {
  * @param {string} filter 
  * @param {string} rangeawal 
  * @param {string} rangeakhir 
- * @returns {parseobj} result
+ * @returns {responseobj} result
  */
 function fetchtaskrange(filter, rangeawal, rangeakhir) {
   const taskdb = editJsonFile("db/task.json");
@@ -375,6 +376,35 @@ function fetchtaskrange(filter, rangeawal, rangeakhir) {
 
   return result;
 }
+
+/**
+ * Mereturn responseobj hasil proses parsing untuk fitur find task
+ *
+ * @param {parseobj} parsed hasil parsing teks.
+ * @return {responseobj} hasil proses
+ */
+function find(parsed) {
+  const taskdb = editJsonFile("db/task.json");
+  const id = Object.keys(taskdb.get());
+  let result, status, response;
+
+  for (let i in id) {
+    let condition = taskdb.get(id[i]+".jenis") == parsed.task && taskdb.get(id[i]+".kuliah") == parsed.kuliah;
+    if (condition) {
+      status = "ok";
+      response = taskdb.get(id[i]+".tanggal");
+      break;
+    }
+  }
+  
+  result = {
+    status: status ? status : "error",
+    response: response ? response : "Tidak ada hasil yang ditemukan."
+  }
+
+  return result;
+}
+
 /**
  * Mereturn string format tanggal
  *
