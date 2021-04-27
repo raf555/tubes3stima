@@ -8,20 +8,24 @@ app.post("/parsechat", (req, res) => {
   let err = false;
   let parsed;
 
-  try {
-    parsed = chatjs.parse(chat);
-  } catch (e) {
-    err = true;
-  }
-
-  if (!chat || err || !parsed) {
-    res.json({
-      status: "error",
-      response: "Maaf pesan tidak dikenali."
-    });
+  let sim = chatjs.similarity(chat);
+  if (sim.length > 0) {
+    res.json(similarity(sim, chat));
   } else {
-    let result = process(parsed);
-    res.json(result);
+    try {
+      parsed = chatjs.parse(chat);
+    } catch (e) {
+      err = true;
+    }
+    if (!chat || err || !parsed) {
+      res.json({
+        status: "error",
+        response: "Maaf pesan tidak dikenali."
+      });
+    } else {
+      let result = process(parsed);
+      res.json(result);
+    }
   }
 });
 
@@ -51,7 +55,7 @@ function process(parsed) {
     result = fetch(parsed);
   } else if (type == "find") {
   } else if (type == "help") {
-    result = help(parsed)
+    result = help(parsed);
   }
 
   return result;
@@ -146,7 +150,7 @@ function update(parsed) {
 function fetch(parsed) {
   const taskdb = editJsonFile("db/task.json");
   const x = json.parse("db/task.json");
-  
+
   let result, status, response;
 
   let filter = parsed.jenis;
@@ -160,7 +164,7 @@ function fetch(parsed) {
 
   // }
   result = {
-    status : "ok",
+    status: "ok",
     response: "anjay"
   };
   return result;
@@ -186,29 +190,28 @@ function makedate(date) {
  * @param {parseobj} parsed hasil parsing teks.
  * @return {responseobj} hasil proses
  */
-function finish(parsed){
+function finish(parsed) {
   const taskdb = editJsonFile("db/task.json");
   let result, status, response;
 
   // update fi
   let id = parsed.id;
- 
+
   let target = taskdb.get(id);
 
   if (!target) {
     status = "error";
     response = "Maaf, Task dengan id " + id + " tidak ditemukan.";
-  }
-  else{
+  } else {
     let condition;
-    if(target.selesai == false){
+    if (target.selesai == false) {
       condition = true;
-    }
-    else condition = false;
+    } else condition = false;
 
     if (!condition) {
       status = "error";
-      response = "Maaf, Task dengan id " + id + " sudah pernah diselesaikan sebelumnya";
+      response =
+        "Maaf, Task dengan id " + id + " sudah pernah diselesaikan sebelumnya";
     } else {
       taskdb.set(id + ".selesai", true);
       taskdb.save();
@@ -231,17 +234,38 @@ function finish(parsed){
  * @return {responseobj} hasil proses
  */
 
-function help(parsed){
-  let fitur = '[Fitur]<br>';
-  for (let index = 0; index < parsed.fitur.length; index++) fitur+='  '+(index+1)+'. '+parsed.fitur[index]+'<br>';
-  let penting = '[Daftar Kata Penting]<br>';
-  for (let index = 0; index < parsed.katapenting.length; index++) penting+='  '+(index+1)+'. '+parsed.katapenting[index]+'<br>';
+function help(parsed) {
+  let fitur = "[Fitur]<br>";
+  for (let index = 0; index < parsed.fitur.length; index++)
+    fitur += "  " + (index + 1) + ". " + parsed.fitur[index] + "<br>";
+  let penting = "[Daftar Kata Penting]<br>";
+  for (let index = 0; index < parsed.katapenting.length; index++)
+    penting += "  " + (index + 1) + ". " + parsed.katapenting[index] + "<br>";
   let resp = fitur + penting;
   let result = {
-    status : "ok",
-    response : resp
-  }
+    status: "ok",
+    response: resp
+  };
   return result;
+}
+
+/**
+ * Mereturn responseobj hasil proses parsing untuk handle similarity
+ *
+ * @param {array} sim, hasil fungsi chatjs.similarity
+ * @return {responseobj} hasil proses
+ */
+function similarity(sim, chat) {
+  /*for (let i in sim) {
+    let rec = sim[i].recommended;
+    chat.replace(new RegExp(rec, "g"), text => {
+      return `<b title="${rec}">${text}</b>`;
+    });
+  }*/
+  return {
+    status: "ok",
+    response: "Apakah maksud kamu " + sim[0].recommended + " ?"
+  };
 }
 
 module.exports = app;

@@ -11,7 +11,7 @@ module.exports = {
   kataupdate: worddb.get("update"), // kata penting fitur update
   katahelp: worddb.get("help"), // keyword fitur help
   katafitur: worddb.get("fitur"), // fitur bot
-  katafinish : worddb.get("finish"),
+  katafinish: worddb.get("finish"),
   /* method */
   parse: text => {
     let _this = module.exports;
@@ -38,7 +38,8 @@ module.exports = {
   parse3: parse3,
   parse4: parse4,
   parse5: parse5,
-  parse6: parse6
+  parse6: parse6,
+  similarity: similarity
 };
 
 /**
@@ -124,7 +125,7 @@ function getdate(text) {
     }
   }
 
-  if(date!=null) return date.length > 0 ? date : null;
+  if (date != null) return date.length > 0 ? date : null;
   else return null;
 }
 
@@ -209,7 +210,7 @@ function parse1(text) {
  */
 function parse2(text) {
   /* fetch data (full, time range, task) */
-  
+
   const keyword = module.exports.katafetch;
   const keyjenis = module.exports.jenis;
   let tipe, jenis;
@@ -253,7 +254,7 @@ function parse2(text) {
   /* return checker hari ini */
   if (tipe == "hari ini") {
     let date = new Date();
-    date = date.setDate()
+    date = date.setDate();
     let out = {
       type: "fetch",
       jenis: jenis,
@@ -276,7 +277,7 @@ function parse2(text) {
       type: "fetch",
       jenis: jenis,
       tipefetch: "incr",
-      incr: parseInt(N,10)
+      incr: parseInt(N, 10)
     };
     return !!jenis ? out : null;
   }
@@ -294,7 +295,7 @@ function parse2(text) {
       type: "fetch",
       jenis: jenis,
       tipefetch: "incr",
-      incr: parseInt(N*7,10)
+      incr: parseInt(N * 7, 10)
     };
     return !!jenis ? out : null;
   }
@@ -405,7 +406,7 @@ function parse5(text) {
   for (let i in keyword) {
     let match = bmSearch(text, keyword[i]);
     if (match != -1) {
-        updatefinish = true;
+      updatefinish = true;
     }
   }
   regex = /task\s(\d+)/gi;
@@ -423,7 +424,6 @@ function parse5(text) {
     type: "finish",
     id: id
   };
-
 }
 /**
  * Mengembalikan parseobj
@@ -442,7 +442,12 @@ function parse6(text) {
   const katahelp = module.exports.katahelp;
   for (let i in katahelp) {
     if (bmSearch(text, katahelp[i]) != -1) {
-      let katakey = module.exports.jenis.concat(module.exports.kataupdate,katahelp,module.exports.katafetch,module.exports.katafinish);
+      let katakey = module.exports.jenis.concat(
+        module.exports.kataupdate,
+        katahelp,
+        module.exports.katafetch,
+        module.exports.katafinish
+      );
       katakey.sort();
       return {
         type: "help",
@@ -454,7 +459,7 @@ function parse6(text) {
 }
 /**
  * Boyer-Moore String Matching Algorithm
- * 
+ *
  * @param {string} text string input
  * @param {string} pattern pattern untuk dicek apakah berada dalam text
  * @return {int} index kemunculan pertama pattern pada text atau -1 jika tidak ditemukan
@@ -507,12 +512,12 @@ function bmSearch(text, pattern) {
 }
 /**
  * Knuth-Morris-Pratt String Matching Algorithm
- * 
+ *
  * @param {string} text string input
  * @param {string} pattern pattern untuk dicek apakah berada dalam text
  * @return {int} index kemunculan pertama pattern pada text atau -1 jika tidak ditemukan
  */
-function kmpSearch(text,pattern){
+function kmpSearch(text, pattern) {
   // Knuth-Morris-Pratt string matching - forward searching
   // non case-sensitive search - convert all to lowercase
   let ltext = text.toLowerCase();
@@ -523,73 +528,75 @@ function kmpSearch(text,pattern){
   }
   // find Failure Function
   // F[j] = length of longest possible prefix of Pattern that is a suffix of Pattern[i..j]
-  let F = Array(lpat.length) // Failure func
+  let F = Array(lpat.length); // Failure func
   // i, j pattern index (untuk dicocokkan char pada index tersebut)
   let i = 1;
-  let j = 0; 
-  while(i < lpat.length){
+  let j = 0;
+  while (i < lpat.length) {
+    if (lpat.charCodeAt(i) == lpat.charCodeAt(j)) {
+      // match
+      F[i] = j + 1;
+      i++;
+      j++;
+    } else {
+      // prefix length count interrupted (ada mismatch)
 
-    if(lpat.charCodeAt(i) == lpat.charCodeAt(j)){ // match
-      F[i] = j + 1; i++; j++;
-    }
-    else { // prefix length count interrupted (ada mismatch)
-
-      if(j > 0) j = F[j-1]; 
-      else{
-        F[i] = 0; i++;
+      if (j > 0) j = F[j - 1];
+      else {
+        F[i] = 0;
+        i++;
       }
-
     }
   }
 
-
-  // Find pattern starting index at text 
-  txtidx = 0; // text index
-  patidx = 0; // pattern index
+  // Find pattern starting index at text
+  let txtidx = 0; // text index
+  let patidx = 0; // pattern index
   while (txtidx < ltext.length) {
     // Compare char by char
-    if(ltext.charCodeAt(txtidx) == lpat.charCodeAt(patidx)){
-      if(patidx == lpat.length - 1) return (txtidx + 1 - lpat.length); // found, mencapai akhir string pattern
+    if (ltext.charCodeAt(txtidx) == lpat.charCodeAt(patidx)) {
+      if (patidx == lpat.length - 1) return txtidx + 1 - lpat.length; // found, mencapai akhir string pattern
       txtidx++;
       patidx++;
-    }
-
-    else{ // mismatch
-      if(patidx > 0) patidx = F[patidx-1];
+    } else {
+      // mismatch
+      if (patidx > 0) patidx = F[patidx - 1];
       else txtidx++;
     }
   }
 
-
   return -1; // not found
-
 }
 /**
  * Levenshtein distance algorithm
- * 
+ *
  * @param {string} text string input
  * @param {string} pattern pattern untuk dicek distance nya dengan text
  * @return {int} banyak char mismatch untuk menyamakan text dengan pattern
  */
-function Levenshtein(text,pattern){
-
+function Levenshtein(text, pattern) {
   let ltext = text.toLowerCase();
   let lpat = pattern.toLowerCase();
-  // case empty string 
-  if(ltext.length == 0) return lpat.length;
-  if(lpat.length == 0) return ltext.length;
-  let d = Array(ltext.length+1).fill(null).map(()=>Array(lpat.length + 1).fill(0)); // DP matrix of integer - indikator banyak char mismatch sejauh subproblem pada index i,j  
+  // case empty string
+  if (ltext.length == 0) return lpat.length;
+  if (lpat.length == 0) return ltext.length;
+  let d = Array(ltext.length + 1)
+    .fill(null)
+    .map(() => Array(lpat.length + 1).fill(0)); // DP matrix of integer - indikator banyak char mismatch sejauh subproblem pada index i,j
   for (let index = 0; index < ltext.length + 1; index++) d[index][0] = index;
   for (let index = 0; index < lpat.length + 1; index++) d[0][index] = index;
 
   // Iterate tiap char
-  for (let i= 1; i < ltext.length + 1; i++){
-      for (let j = 1; j < lpat.length + 1; j++) {
-          let match = (ltext.charCodeAt(i - 1) == lpat.charCodeAt(j-1)) ? 0 : 1; // match = indikator char match
-          // find minimum dari hasil matching subproblem yang dilakukan sebelumnya
-          d[i][j] = Math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + match);  
-      
-        }
+  for (let i = 1; i < ltext.length + 1; i++) {
+    for (let j = 1; j < lpat.length + 1; j++) {
+      let match = ltext.charCodeAt(i - 1) == lpat.charCodeAt(j - 1) ? 0 : 1; // match = indikator char match
+      // find minimum dari hasil matching subproblem yang dilakukan sebelumnya
+      d[i][j] = Math.min(
+        d[i - 1][j] + 1,
+        d[i][j - 1] + 1,
+        d[i - 1][j - 1] + match
+      );
+    }
   }
   return d[ltext.length][lpat.length]; // final sol
 }
@@ -599,33 +606,58 @@ function Levenshtein(text,pattern){
  * @param {string} text string input
  * @return {obj} similarity(double) dan recommended word (string)
  */
-function findSimilar(text){
+function findSimilar(text) {
   // kamus kata pada db
-  let katakey = module.exports.jenis.concat(module.exports.kataupdate,module.exports.katahelp,module.exports.katafetch,module.exports.katafinish);
-  let maxsim; let lev; let sim; let rec;
+  let katakey = module.exports.jenis.concat(
+    module.exports.kataupdate,
+    module.exports.katahelp,
+    module.exports.katafetch,
+    module.exports.katafinish
+  );
+  let maxsim;
+  let lev;
+  let sim;
+  let rec;
   // iterate tiap kata pada db
-  for(let i in katakey){
-      lev = Levenshtein(text,katakey[i]); // compute levenshtein
-      sim = 1 - (lev / (Math.max(text.length,katakey[i].length))); // find similarity
-      if(i=="0"){ // init
+  for (let i in katakey) {
+    lev = Levenshtein(text, katakey[i]); // compute levenshtein
+    sim = 1 - lev / Math.max(text.length, katakey[i].length); // find similarity
+    if (i == "0") {
+      // init
+      maxsim = sim;
+      rec = katakey[0];
+    } else {
+      if (sim > maxsim) {
+        // find max similarity
         maxsim = sim;
-        rec = katakey[0];
+        rec = katakey[i];
       }
-      else{ 
-        if(sim > maxsim){ // find max similarity
-          maxsim = sim;
-          rec = katakey[i];
-        }
-      }  
+    }
   }
-  if(maxsim >= 0.75){ // valid bila similarity diatas 75%
+  if (maxsim >= 0.75) {
+    // valid bila similarity diatas 75%
     return {
       similarity: maxsim,
       recommended: rec
-    }
-  }
-  else return null;
+    };
+  } else return null;
+}
 
+/**
+ * menghasilkan array of obj findsimilar untuk suatu teks
+ * @param {string} text string input
+ * @return {array of obj} similarity(double) dan recommended word (string)
+ */
+function similarity(text) {
+  let splited = text.split(" ");
+  let out = [];
+  splited.forEach(word => {
+    let sim = findSimilar(word);
+    if (sim != null && sim.similarity != 1) {
+      out.push(sim);
+    }
+  });
+  return out;
 }
 
 // let text = "dedline";
