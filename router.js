@@ -238,7 +238,7 @@ function help(parsed){
   for (let index = 0; index < parsed.katapenting.length; index++) penting+='  '+(index+1)+'. '+parsed.katapenting[index]+'<br>';
   let resp = fitur + penting;
   console.log(resp)
-  result = {
+  let result = {
     status : "ok",
     response : resp
   }

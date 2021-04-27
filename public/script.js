@@ -3,6 +3,11 @@ $(document).ready(function() {
   const chatArea = document.querySelector(".chat-area");
   const textArea = document.querySelector("textarea");
 
+  if (localStorage.getItem("history") != null) {
+    $(chatArea).html(localStorage.getItem("history"));
+    $(chatArea).scrollTop(chatArea.scrollHeight);
+  }
+
   /* key binding */
   $(textArea)
     .keydown(submit)
@@ -20,11 +25,19 @@ $(document).ready(function() {
 
   function sendmsg(event) {
     let input = textArea.value;
-    if (!input || input == ""){
+    if (!input || input == "") {
+      return;
+    }
+    if (input.toLowerCase() == "clear") {
+      localStorage.removeItem("history");
+      location.reload();
       return;
     }
 
-    
+    const removenewline = text => {
+      return text.replace(/\n/g, "<br>");
+    };
+
     let temp = `<div class="out-msg">
     <span class="my-msg">${input}</span>
     <img src="assets/botan.png" class="avatar" alt="" />`;
@@ -37,12 +50,23 @@ $(document).ready(function() {
         chat: input
       },
       function(res, status) {
-        let temp2 = `<div class="income-msg">
+        if (!Array.isArray(res.response)) {
+          let temp2 = `<div class="income-msg">
             <img src="assets/botan.png" class="avatar" alt="">
-            <span class="msg">${res.response}</span>
+            <span class="msg">${removenewline(res.response)}</span>
         </div>`;
-        chatArea.insertAdjacentHTML("beforeend", temp2);
+          chatArea.insertAdjacentHTML("beforeend", temp2);
+        } else {
+          res.response.forEach(response => {
+            let temp2 = `<div class="income-msg">
+            <img src="assets/botan.png" class="avatar" alt="">
+            <span class="msg">${removenewline(response)}</span>
+        </div>`;
+            chatArea.insertAdjacentHTML("beforeend", temp2);
+          });
+        }
         $(chatArea).scrollTop(chatArea.scrollHeight);
+        localStorage.setItem("history", $(chatArea).html());
       }
     );
   }
