@@ -745,7 +745,8 @@ function findSimilar(text) {
     // valid bila similarity diatas 75%
     return {
       similarity: maxsim,
-      recommended: rec
+      recommended: rec,
+      word: text
     };
   } else return null;
 }

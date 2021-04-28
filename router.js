@@ -526,15 +526,14 @@ function help(parsed) {
  * @return {responseobj} hasil proses
  */
 function similarity(sim, chat) {
-  /*for (let i in sim) {
+  for (let i in sim) {
+    let word = sim[i].word;
     let rec = sim[i].recommended;
-    chat.replace(new RegExp(rec, "g"), text => {
-      return `<b title="${rec}">${text}</b>`;
-    });
-  }*/
+    chat = chat.replace(new RegExp(word, "gi"),`<b title="${rec}">${word}</b>`);
+  }
   return {
     status: "ok",
-    response: "Apakah maksud kamu " + sim[0].recommended + " ?"
+    response: chat+"\n\nApakah maksud kamu " + sim[0].recommended + " ?"
   };
 }
 
