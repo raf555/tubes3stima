@@ -32,10 +32,10 @@ $(document).ready(function() {
           "Bot, tolong tambahin tubes IF2211 bikin chatbot nanti tanggal 28 april 2021";
         break;
       case 3:
-        text = "Bot, ada deadline apa aja sejauh ini?";
+        text = "Bot, ada tubes apa saja sejauh ini?";
         break;
       case 5:
-        text = "Bot, ada tubes apa saja sejauh ini?";
+        text = "Bot, ada deadline apa aja sejauh ini?";
         break;
       case 7:
         text = "Bot, deadline dari task 1 diundur jadi 29 april 2021";
