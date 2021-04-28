@@ -138,9 +138,9 @@ function update(parsed) {
       if (taskdb.get(id).selesai){
         status = "error";
         response = "Task dengan id " + id + " sudah selesai, tidak dapat memperbarui tanggal."
-      } else if (curdatestamp < (new Date()).getTime()){
+      /*} else if (curdatestamp < (new Date()).getTime()){
         status = "error";
-        response = "Task dengan id " + id + " sudah lewat deadline-nya, tidak dapat memperbarui tanggal."
+        response = "Task dengan id " + id + " sudah lewat deadline-nya, tidak dapat memperbarui tanggal."*/
       } else {
         let olddate = taskdb.get(id).tanggal;
         newdate = makedate(newdate);
