@@ -135,14 +135,22 @@ function update(parsed) {
       status = "error";
       response = "Tanggal tidak valid";
     } else {
-      let olddate = taskdb.get(id).tanggal;
-      newdate = makedate(newdate);
+      if (taskdb.get(id).selesai){
+        status = "error";
+        response = "Task dengan id " + id + " sudah selesai, tidak dapat memperbarui tanggal."
+      } else if (curdatestamp < (new Date()).getTime()){
+        status = "error";
+        response = "Task dengan id " + id + " sudah lewat deadline-nya, tidak dapat memperbarui tanggal."
+      } else {
+        let olddate = taskdb.get(id).tanggal;
+        newdate = makedate(newdate);
 
-      taskdb.set(id + ".tanggal", newdate);
-      taskdb.save();
-      status = "ok";
-      response = "Task dengan id " + id + " berhasil diperbarui tanggalnya.";
-      response += "\n" + olddate + " -> " + newdate;
+        taskdb.set(id + ".tanggal", newdate);
+        taskdb.save();
+        status = "ok";
+        response = "Task dengan id " + id + " berhasil diperbarui tanggalnya.";
+        response += "\n" + olddate + " -> " + newdate;
+      }
     }
   }
   result = {
