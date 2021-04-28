@@ -1,6 +1,6 @@
 {
   "1": {
-    "tanggal": "27/04/2021",
+    "tanggal": "22/05/2021",
     "kuliah": "oop",
     "jenis": "Kuis",
     "topik": "gatau materi apaan tapi",
@@ -46,6 +46,34 @@
     "kuliah": "IF2211",
     "jenis": "Tubes",
     "topik": "String Matching",
+    "selesai": false
+  },
+  "8": {
+    "tanggal": "28/04/2021",
+    "kuliah": "IF2211",
+    "jenis": "Tubes",
+    "topik": "bikin chatbot",
+    "selesai": false
+  },
+  "9": {
+    "tanggal": "28/04/2021",
+    "kuliah": "IF2211",
+    "jenis": "Tubes",
+    "topik": "bikin chatbot",
+    "selesai": false
+  },
+  "10": {
+    "tanggal": "28/04/2021",
+    "kuliah": "IF2211",
+    "jenis": "Tubes",
+    "topik": "bikin chatbot",
+    "selesai": false
+  },
+  "11": {
+    "tanggal": "28/04/2021",
+    "kuliah": "IF2211",
+    "jenis": "Tubes",
+    "topik": "bikin chatbot",
     "selesai": false
   }
 }

@@ -3,6 +3,6 @@
   "fetch": ["deadline", "sejauh ini", "hari ini", "hari ke depan", "minggu ke depan", "antara"],
   "update": ["deadline", "diundur", "dimajuin", "diubah", "revisi"],
   "help": ["help","tolong","fitur","bisa","keyword","kata penting"],
-  "fitur": ["Menambahkan task baru","Melihat daftar task","Menampilkan deadline","Update task","Menandai task sudah selesai","Menampilkan kata kunci"],
+  "fitur": ["Menambahkan task baru","Melihat daftar task","Menampilkan deadline","Update task","Menandai task sudah selesai","Menampilkan kata kunci","Clear history chat (clear)"],
   "finish":["sudah","selesai","menyelesaikan","udah","finish","complete","komplet"]
 }

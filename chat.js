@@ -332,7 +332,7 @@ function parse3(text) {
   let match;
 
   // get keyword "deadline"
-  match = bmSearch(text,"deadline");
+  match = bmSearch(text, "deadline");
   if (match == -1) {
     return null;
   }
@@ -463,10 +463,10 @@ function parse5(text) {
   if (!updatefinish) {
     return null;
   }
-  
-  if(exec==null){
+
+  if (exec == null) {
     return {
-      type:"finish",
+      type: "finish",
       id: -1
     }
   }
@@ -491,7 +491,49 @@ function parse5(text) {
 function parse6(text) {
   /* help */
   const katahelp = module.exports.katahelp;
-  for (let i in katahelp) {
+  const katafitur = module.exports.katafitur;
+  if ((/fitur\s(\d+)/gi).exec(text) != null) {
+    let id = (/fitur\s(\d+)/gi).exec(text)[1];
+    switch (id) {
+      case "1":
+        return {
+          type: "help",
+          fitur: katafitur[0].split(),
+          katapenting: module.exports.jenis
+        }
+      case "2":
+        return {
+          type: "help",
+          fitur: katafitur[1].split(),
+          katapenting: module.exports.katafetch
+        }
+      case "3":
+        return {
+          type: "help",
+          fitur: katafitur[2].split(),
+          katapenting: module.exports.katafetch
+        }
+      case "4":
+        return {
+          type: "help",
+          fitur: katafitur[3].split(),
+          katapenting: module.exports.kataupdate
+        }
+      case "5":
+        return {
+          type: "help",
+          fitur: katafitur[4].split(),
+          katapenting: module.exports.katafinish
+        }
+      case "6":
+        return {
+          type: "help",
+          fitur: katafitur[5].split(),
+          katapenting: katahelp
+        }
+    }
+  }
+  else for (let i in katahelp) {
     if (bmSearch(text, katahelp[i]) != -1) {
       let katakey = module.exports.jenis.concat(
         module.exports.kataupdate,
@@ -502,7 +544,7 @@ function parse6(text) {
       katakey.sort();
       return {
         type: "help",
-        fitur: module.exports.katafitur,
+        fitur: katafitur,
         katapenting: katakey
       };
     }

@@ -504,8 +504,10 @@ function finish(parsed) {
 
 function help(parsed) {
   let fitur = "[Fitur]<br>";
-  for (let index = 0; index < parsed.fitur.length; index++)
+  if (parsed.fitur.length == 1) fitur += parsed.fitur[0] + "<br>";
+  else for (let index = 0; index < parsed.fitur.length; index++)
     fitur += "  " + (index + 1) + ". " + parsed.fitur[index] + "<br>";
+  fitur +="<br>";
   let penting = "[Daftar Kata Penting]<br>";
   for (let index = 0; index < parsed.katapenting.length; index++)
     penting += "  " + (index + 1) + ". " + parsed.katapenting[index] + "<br>";
