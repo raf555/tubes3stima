@@ -33,7 +33,7 @@ $(document).ready(function() {
         text = "Bot, ada deadline apa aja sejauh ini?";
         break;
       case 5:
-        text = "Bot, deadline tugas IF2211 kapan?";
+        text = "Bot, ada tubes apa saja sejauh ini?";
         break;
       case 7:
         text = "Bot, deadline dari task 1 diundur jadi 29 april 2021";
