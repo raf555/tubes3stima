@@ -421,20 +421,25 @@ function find(parsed) {
   const id = Object.keys(taskdb.get());
   let result, status, response;
 
+  response = "";
+  
   for (let i in id) {
-    let condition =
-      taskdb.get(id[i] + ".jenis") == parsed.task &&
-      taskdb.get(id[i] + ".kuliah") == parsed.kuliah;
-    if (condition) {
+    let condition1 = parsed.task == "Tugas" ?
+      taskdb.get(id[i] + ".jenis") == "Tucil" || taskdb.get(id[i] + ".jenis") == "Tubes" :
+      taskdb.get(id[i] + ".jenis") == parsed.task
+    let condition2 = 
+      taskdb.get(id[i] + ".kuliah").toLowerCase() == parsed.kuliah &&
+      taskdb.get(id[i] + ".selesai") == false;
+
+    if (condition1 && condition2) {
       status = "ok";
-      response = taskdb.get(id[i] + ".tanggal");
-      break;
+      response = response + `${taskdb.get(id[i] + ".jenis")} - ${taskdb.get(id[i] + ".tanggal")}` + "\n";
     }
   }
 
   result = {
     status: status ? status : "error",
-    response: response ? response : "Tidak ada hasil yang ditemukan."
+    response: response != "" ? response : "Tidak ada hasil yang ditemukan."
   };
 
   return result;

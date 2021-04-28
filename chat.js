@@ -326,7 +326,7 @@ function parse2(text) {
 function parse3(text) {
   /* find data untuk suatu kuliah */
 
-  const keyword = ["Tubes", "Tucil"];
+  const keyword = ["Tugas", "Tubes", "Tucil"];
   let task, kuliah;
   let regex, exec;
   let match;
@@ -356,7 +356,7 @@ function parse3(text) {
   regex = new RegExp(task + "\\s(.+?)\\s", "gi");
   exec = regex.exec(text);
   if (exec) {
-    kuliah = exec[1];
+    kuliah = exec[1].toLowerCase();
   }
 
   let out = {
