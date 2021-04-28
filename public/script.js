@@ -4,6 +4,8 @@ $(document).ready(function() {
   const textArea = document.querySelector("textarea");
   const delhist = document.querySelector(".delhist");
 
+  $(textArea).focus();
+
   /* history chat */
   if (localStorage.getItem("history") != null) {
     $(chatArea).html(localStorage.getItem("history"));
