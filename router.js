@@ -39,7 +39,7 @@ app.post("/parsechat", (req, res) => {
  * response: {string}
  * }
  *
- * @param {string} text untuk di-parse.
+ * @param {parseobj} hasil parsing teks.
  * @return {responseobj} status hasil proses teks
  */
 function process(parsed) {
@@ -119,14 +119,15 @@ function update(parsed) {
     response = "Task dengan id " + id + " tidak ditemukan.";
   } else {
     let curdate = target.tanggal.split("/");
-    curdate = new Date(`${curdate[1]}/${curdate[0]}/${curdate[2]}`).getTime();
-    newdate = makedate(newdate);
+    let curdatestamp = new Date(
+      `${curdate[1]}/${curdate[0]}/${curdate[2]}`
+    ).getTime();
 
     let condition;
     if (indikator == "diundur") {
-      condition = newdatestamp > curdate;
+      condition = newdatestamp > curdatestamp;
     } else if (indikator == "dimajuin") {
-      condition = newdatestamp < curdate;
+      condition = newdatestamp < curdatestamp;
     } else if (indikator == "diubah" || indikator == "revisi") {
       condition = true;
     }
@@ -134,10 +135,14 @@ function update(parsed) {
       status = "error";
       response = "Tanggal tidak valid";
     } else {
+      let olddate = taskdb.get(id).tanggal;
+      newdate = makedate(newdate);
+
       taskdb.set(id + ".tanggal", newdate);
       taskdb.save();
       status = "ok";
       response = "Task dengan id " + id + " berhasil diperbarui tanggalnya.";
+      response += "\n" + olddate + " -> " + newdate;
     }
   }
   result = {
@@ -160,25 +165,25 @@ function fetch(parsed) {
 
   let filter = parsed.jenis;
   let tipefetch = parsed.tipefetch;
-  
+
   if (tipefetch == "all") {
     result = fetchtask(filter);
   } else if (tipefetch == "incr") {
     let curdate = new Date();
     curdate = {
       tgl: curdate.getDate(),
-      bln: curdate.getMonth()+1,
+      bln: curdate.getMonth() + 1,
       thn: curdate.getFullYear()
-    }
+    };
     rangeawal = makedate(curdate);
 
     let lastdate = new Date();
     lastdate.setDate(lastdate.getDate() + parsed.incr);
     lastdate = {
       tgl: lastdate.getDate(),
-      bln: lastdate.getMonth()+1,
+      bln: lastdate.getMonth() + 1,
       thn: lastdate.getFullYear()
-    }
+    };
     rangeakhir = makedate(lastdate);
 
     result = fetchtaskrange(filter, rangeawal, rangeakhir);
@@ -193,9 +198,9 @@ function fetch(parsed) {
 
 /**
  * fetch task tanpa range
- * 
- * @param {string} filter 
- * @return {responseobj} 
+ *
+ * @param {string} filter
+ * @return {responseobj}
  */
 function fetchtask(filter) {
   const taskdb = editJsonFile("db/task.json");
@@ -210,24 +215,28 @@ function fetchtask(filter) {
 
   // buat tanggal sekarang
   curdate = new Date();
-  curdate = new Date(`${curdate.getMonth()+1}/${curdate.getDate()}/${curdate.getFullYear()}`).getTime();
+  curdate = new Date(
+    `${curdate.getMonth() + 1}/${curdate.getDate()}/${curdate.getFullYear()}`
+  ).getTime();
 
   // filter task.json
   if (filter == "semua") {
     for (let i in id) {
-      let taskdate = taskdb.get(id[i]+".tanggal").split("/");
-      taskdate = new Date(`${taskdate[1]}/${taskdate[0]}/${taskdate[2]}`).getTime();
-      
+      let taskdate = taskdb.get(id[i] + ".tanggal").split("/");
+      taskdate = new Date(
+        `${taskdate[1]}/${taskdate[0]}/${taskdate[2]}`
+      ).getTime();
+
       // task belum selesai
-      let masuklist = taskdb.get(id[i]+".selesai") == false; 
+      let masuklist = taskdb.get(id[i] + ".selesai") == false;
 
       if (masuklist) {
-        let tempdate = taskdb.get(id[i]+".tanggal");
-        let tempcode = taskdb.get(id[i]+".kuliah");
-        let temptype = taskdb.get(id[i]+".jenis");
-        let tempdesc = taskdb.get(id[i]+".topik");
+        let tempdate = taskdb.get(id[i] + ".tanggal");
+        let tempcode = taskdb.get(id[i] + ".kuliah");
+        let temptype = taskdb.get(id[i] + ".jenis");
+        let tempdesc = taskdb.get(id[i] + ".topik");
         let list = `(ID: ${id[i]}) - ${tempdate} - ${tempcode} - ${temptype} - ${tempdesc}`;
-        
+
         // cek jika task sudah overdue
         if (taskdate < curdate) {
           list = list + " - OVERDUE";
@@ -238,19 +247,23 @@ function fetchtask(filter) {
     }
   } else {
     for (let i in id) {
-      let taskdate = taskdb.get(id[i]+".tanggal").split("/");
-      taskdate = new Date(`${taskdate[1]}/${taskdate[0]}/${taskdate[2]}`).getTime();
-      
+      let taskdate = taskdb.get(id[i] + ".tanggal").split("/");
+      taskdate = new Date(
+        `${taskdate[1]}/${taskdate[0]}/${taskdate[2]}`
+      ).getTime();
+
       // task belum selesai dan sesuai jenis
-      let masuklist = taskdb.get(id[i]+".selesai") == false && taskdb.get(id[i]+".jenis") == filter;
+      let masuklist =
+        taskdb.get(id[i] + ".selesai") == false &&
+        taskdb.get(id[i] + ".jenis") == filter;
 
       if (masuklist) {
-        let tempdate = taskdb.get(id[i]+".tanggal");
-        let tempcode = taskdb.get(id[i]+".kuliah");
-        let temptype = taskdb.get(id[i]+".jenis");
-        let tempdesc = taskdb.get(id[i]+".topik");
+        let tempdate = taskdb.get(id[i] + ".tanggal");
+        let tempcode = taskdb.get(id[i] + ".kuliah");
+        let temptype = taskdb.get(id[i] + ".jenis");
+        let tempdesc = taskdb.get(id[i] + ".topik");
         let list = `(ID: ${id[i]}) - ${tempdate} - ${tempcode} - ${temptype} - ${tempdesc}`;
-        
+
         // cek jika task sudah overdue
         if (taskdate < curdate) {
           list = list + " - OVERDUE";
@@ -260,18 +273,18 @@ function fetchtask(filter) {
       }
     }
   }
-  
+
   // cek jika ada hasil
   if (string != "[DAFTAR DEADLINE]\n") {
     result = {
       status: "ok",
       response: string
-    }
+    };
   } else {
     result = {
       status: "error",
       response: "Tidak ada hasil yang ditemukan."
-    }
+    };
   }
 
   return result;
@@ -279,10 +292,10 @@ function fetchtask(filter) {
 
 /**
  * fetch task dengan range
- * 
- * @param {string} filter 
- * @param {string} rangeawal 
- * @param {string} rangeakhir 
+ *
+ * @param {string} filter
+ * @param {string} rangeawal
+ * @param {string} rangeakhir
  * @returns {responseobj} result
  */
 function fetchtaskrange(filter, rangeawal, rangeakhir) {
@@ -298,34 +311,42 @@ function fetchtaskrange(filter, rangeawal, rangeakhir) {
 
   // buat batas tanggal awal
   rangeawal = rangeawal.split("/");
-  firstdate = new Date(`${rangeawal[1]}/${rangeawal[0]}/${rangeawal[2]}`).getTime();
+  firstdate = new Date(
+    `${rangeawal[1]}/${rangeawal[0]}/${rangeawal[2]}`
+  ).getTime();
 
   // buat tanggal sekarang
   curdate = new Date();
-  curdate = new Date(`${curdate.getMonth()+1}/${curdate.getDate()}/${curdate.getFullYear()}`).getTime();
-  
+  curdate = new Date(
+    `${curdate.getMonth() + 1}/${curdate.getDate()}/${curdate.getFullYear()}`
+  ).getTime();
+
   // buat batas tanggal akhir
   rangeakhir = rangeakhir.split("/");
-  lastdate = new Date(`${rangeakhir[1]}/${rangeakhir[0]}/${rangeakhir[2]}`).getTime();
+  lastdate = new Date(
+    `${rangeakhir[1]}/${rangeakhir[0]}/${rangeakhir[2]}`
+  ).getTime();
 
   // filter task.json
   if (filter == "semua") {
     for (let i in id) {
-      let taskdate = taskdb.get(id[i]+".tanggal").split("/");
-      taskdate = new Date(`${taskdate[1]}/${taskdate[0]}/${taskdate[2]}`).getTime();
-      
+      let taskdate = taskdb.get(id[i] + ".tanggal").split("/");
+      taskdate = new Date(
+        `${taskdate[1]}/${taskdate[0]}/${taskdate[2]}`
+      ).getTime();
+
       // task belum selesai
-      let masuklist1 = taskdb.get(id[i]+".selesai") == false; 
+      let masuklist1 = taskdb.get(id[i] + ".selesai") == false;
       // task masuk range tanggal
       let masuklist2 = firstdate <= taskdate && taskdate <= lastdate;
 
       if (masuklist1 && masuklist2) {
-        let tempdate = taskdb.get(id[i]+".tanggal");
-        let tempcode = taskdb.get(id[i]+".kuliah");
-        let temptype = taskdb.get(id[i]+".jenis");
-        let tempdesc = taskdb.get(id[i]+".topik");
+        let tempdate = taskdb.get(id[i] + ".tanggal");
+        let tempcode = taskdb.get(id[i] + ".kuliah");
+        let temptype = taskdb.get(id[i] + ".jenis");
+        let tempdesc = taskdb.get(id[i] + ".topik");
         let list = `(ID: ${id[i]}) - ${tempdate} - ${tempcode} - ${temptype} - ${tempdesc}`;
-        
+
         // cek jika task sudah overdue
         if (taskdate < curdate) {
           list = list + " - OVERDUE";
@@ -336,21 +357,25 @@ function fetchtaskrange(filter, rangeawal, rangeakhir) {
     }
   } else {
     for (let i in id) {
-      let taskdate = taskdb.get(id[i]+".tanggal").split("/");
-      taskdate = new Date(`${taskdate[1]}/${taskdate[0]}/${taskdate[2]}`).getTime();
-      
+      let taskdate = taskdb.get(id[i] + ".tanggal").split("/");
+      taskdate = new Date(
+        `${taskdate[1]}/${taskdate[0]}/${taskdate[2]}`
+      ).getTime();
+
       // task belum selesai dan sesuai jenis
-      let masuklist1 = taskdb.get(id[i]+".selesai") == false && taskdb.get(id[i]+".jenis") == filter;
+      let masuklist1 =
+        taskdb.get(id[i] + ".selesai") == false &&
+        taskdb.get(id[i] + ".jenis") == filter;
       // task masuk range tanggal
-      let masuklist2 = firstdate <= taskdate && taskdate <= lastdate; 
+      let masuklist2 = firstdate <= taskdate && taskdate <= lastdate;
 
       if (masuklist1 && masuklist2) {
-        let tempdate = taskdb.get(id[i]+".tanggal");
-        let tempcode = taskdb.get(id[i]+".kuliah");
-        let temptype = taskdb.get(id[i]+".jenis");
-        let tempdesc = taskdb.get(id[i]+".topik");
+        let tempdate = taskdb.get(id[i] + ".tanggal");
+        let tempcode = taskdb.get(id[i] + ".kuliah");
+        let temptype = taskdb.get(id[i] + ".jenis");
+        let tempdesc = taskdb.get(id[i] + ".topik");
         let list = `(ID: ${id[i]}) - ${tempdate} - ${tempcode} - ${temptype} - ${tempdesc}`;
-        
+
         // cek jika task sudah overdue
         if (taskdate < curdate) {
           list = list + " - OVERDUE";
@@ -360,18 +385,18 @@ function fetchtaskrange(filter, rangeawal, rangeakhir) {
       }
     }
   }
-  
+
   // cek jika ada hasil
   if (string != "[DAFTAR DEADLINE]\n") {
     result = {
       status: "ok",
       response: string
-    }
+    };
   } else {
     result = {
       status: "error",
       response: "Tidak ada hasil yang ditemukan."
-    }
+    };
   }
 
   return result;
@@ -389,18 +414,20 @@ function find(parsed) {
   let result, status, response;
 
   for (let i in id) {
-    let condition = taskdb.get(id[i]+".jenis") == parsed.task && taskdb.get(id[i]+".kuliah") == parsed.kuliah;
+    let condition =
+      taskdb.get(id[i] + ".jenis") == parsed.task &&
+      taskdb.get(id[i] + ".kuliah") == parsed.kuliah;
     if (condition) {
       status = "ok";
-      response = taskdb.get(id[i]+".tanggal");
+      response = taskdb.get(id[i] + ".tanggal");
       break;
     }
   }
-  
+
   result = {
     status: status ? status : "error",
     response: response ? response : "Tidak ada hasil yang ditemukan."
-  }
+  };
 
   return result;
 }
@@ -433,11 +460,11 @@ function finish(parsed) {
   // update fi
   let id = parsed.id;
 
-  if(id == -1) 
-    return{
+  if (id == -1)
+    return {
       status: "error",
       response: "Maaf, Anda belum mendefinisikan id task"
-  }
+    };
   let target = taskdb.get(id);
 
   if (!target) {

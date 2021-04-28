@@ -18,9 +18,45 @@ $(document).ready(function() {
   /* event listener */
   $(send).on("click", sendmsg);
   $(delhist).on("click", removeHistory);
+  $("#help a").on("click", demo);
 
   /* methods */
-  function removeHistory(){
+  function demo(event) {
+    let idx = $(this).index();
+    let text = "";
+    switch (idx) {
+      case 1:
+        text =
+          "Bot, tolong tambahin tubes IF2211 bikin chatbot nanti tanggal 28 april 2021";
+        break;
+      case 3:
+        text = "Bot, ada deadline apa aja sejauh ini?";
+        break;
+      case 5:
+        text = "Bot, deadline tugas IF2211 kapan?";
+        break;
+      case 7:
+        text = "Bot, deadline dari task 1 diundur jadi 29 april 2021";
+        break;
+      case 9:
+        text = "Bot, task 1 sudah selesai";
+        break;
+      case 11:
+        text = "Bot, kamu bisa ngapain aja?";
+        break;
+      case 13:
+        text = "Bot, tolong hapus history chat";
+        break;
+      default:
+        text = "";
+    }
+    if (text != "") {
+      textArea.value = text;
+      sendmsg();
+    }
+  }
+
+  function removeHistory() {
     localStorage.removeItem("history");
     location.reload();
   }
@@ -34,12 +70,8 @@ $(document).ready(function() {
 
   function sendmsg(event) {
     let input = textArea.value;
-    
+
     if (!input || input == "") {
-      return;
-    }
-    if (input.toLowerCase() == "clear") {
-      removeHistory();
       return;
     }
 
@@ -52,6 +84,15 @@ $(document).ready(function() {
     <img src="https://media-exp1.licdn.com/dms/image/C510BAQF29VPd4q7H9w/company-logo_200_200/0/1525360759270?e=2159024400&v=beta&t=2vZsqlINJsQHgU5a0I7hwURaHpvUedhdcwwJYuo-thI" class="avatar" alt="" />`;
     chatArea.insertAdjacentHTML("beforeend", temp);
     textArea.value = "";
+
+    /* delete history chat */
+    if (
+      input.toLowerCase() == "clear" ||
+      /(hapus|delete)\s(history|riwayat)\schat/gi.test(input)
+    ) {
+      removeHistory();
+      return;
+    }
 
     $.post(
       "/parsechat",
